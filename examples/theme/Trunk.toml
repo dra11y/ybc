@@ -1,0 +1,6 @@
+[build]
+target = "index.html"
+dist = "dist"
+
+[tools]
+sass = "1.91.0"
