@@ -24,8 +24,8 @@ pub struct HeroProps {
     #[prop_or_default]
     pub foot_classes: Classes,
     /// If you are using a [fixed navbar](https://bulma.io/documentation/components/navbar/#fixed-navbar),
-    /// you can use the `fixed_nav=true` modifier on the hero for it to occupy the viewport height minus
-    /// the navbar height.
+    /// you can use the `fixed_nav=true` modifier on the hero for it to occupy the viewport height
+    /// minus the navbar height.
     ///
     /// https://bulma.io/documentation/layout/hero/#fullheight-with-navbar
     #[prop_or_default]
@@ -80,14 +80,14 @@ pub fn hero(props: &HeroProps) -> Html {
 ///
 /// [https://bulma.io/documentation/layout/hero/#sizes](https://bulma.io/documentation/layout/hero/#sizes)
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
-#[display(fmt = "is-{}")]
+#[display("is-{}")]
 pub enum HeroSize {
-    #[display(fmt = "medium")]
+    #[display("medium")]
     Medium,
-    #[display(fmt = "large")]
+    #[display("large")]
     Large,
-    #[display(fmt = "fullheight")]
+    #[display("fullheight")]
     Fullheight,
-    #[display(fmt = "fullheight-with-navbar")]
+    #[display("fullheight-with-navbar")]
     FullheightWithNavbar,
 }

@@ -6,14 +6,16 @@
 //!
 //! As a guiding principal, YBC does not attempt to encapsulate every single Bulma style as a Rust
 //! type, let alone the many valid style combinations. That would be far too complex, and probably
-//! limiting to the user in many ways. Instead, YBC handles structure, required classes, functionality,
-//! sane defaults and every component can be customized with any additional classes for an exact look and feel.
+//! limiting to the user in many ways. Instead, YBC handles structure, required classes,
+//! functionality, sane defaults and every component can be customized with any additional classes
+//! for an exact look and feel.
 //!
 //! What does it look like to use YBC? The following is a snippet of a component's `view` method
 //! rendering a navbar, a fluid container, and some tiles.
 //!
 //! Please see [this project's README](https://github.com/thedodd/ybc) for the example. **Docs.rs is
-//! currently (2021.07.26) slightly broken and having trouble including external docs as it has historically.**
+//! currently (2021.07.26) slightly broken and having trouble including external docs as it has
+//! historically.**
 // TODO: add this back in once it is no longer a land mine:
 //  #![cfg_attr(feature = "docinclude", doc = include_str!("../README.md"))]
 #![recursion_limit = "1024"]
@@ -39,7 +41,9 @@ pub use components::card::{
 pub use components::dropdown::{Dropdown, DropdownMsg, DropdownProps};
 pub use components::menu::{Menu, MenuLabel, MenuLabelProps, MenuList, MenuListProps, MenuProps};
 pub use components::message::{Message, MessageBody, MessageBodyProps, MessageHeader, MessageHeaderProps, MessageProps};
-pub use components::modal::{Modal, ModalCard, ModalCardProps, ModalCloseMsg, ModalCloser, ModalMsg, ModalProps};
+pub use components::modal::{
+    use_modal, Modal, ModalCard, ModalCardProps, ModalCloseMsg, ModalContext, ModalMsg, ModalProps, ModalProvider, ModalProviderProps, UseModalHandle,
+};
 pub use components::navbar::{
     Navbar, NavbarDivider, NavbarDividerProps, NavbarDropdown, NavbarDropdownProps, NavbarFixed, NavbarItem, NavbarItemProps, NavbarItemTag,
     NavbarMsg, NavbarProps,
