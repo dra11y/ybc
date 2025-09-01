@@ -864,10 +864,26 @@ fn panel_section() -> Html {
 #[function_component(TabsSection)]
 fn tabs_section() -> Html {
     let tabs_vec = vec![
-        ybc::Tab { id: "pictures".into(), label: "Pictures".into(), icon_class: Some("fas fa-image".into()) },
-        ybc::Tab { id: "music".into(), label: "Music".into(), icon_class: Some("fas fa-music".into()) },
-        ybc::Tab { id: "videos".into(), label: "Videos".into(), icon_class: Some("fas fa-film".into()) },
-        ybc::Tab { id: "documents".into(), label: "Documents".into(), icon_class: Some("far fa-file-alt".into()) },
+        ybc::Tab {
+            id: "pictures".into(),
+            label: "Pictures".into(),
+            icon_class: Some("fas fa-image".into()),
+        },
+        ybc::Tab {
+            id: "music".into(),
+            label: "Music".into(),
+            icon_class: Some("fas fa-music".into()),
+        },
+        ybc::Tab {
+            id: "videos".into(),
+            label: "Videos".into(),
+            icon_class: Some("fas fa-film".into()),
+        },
+        ybc::Tab {
+            id: "documents".into(),
+            label: "Documents".into(),
+            icon_class: Some("far fa-file-alt".into()),
+        },
     ];
     html! {
         <>
