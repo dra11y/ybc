@@ -2,7 +2,7 @@ use console_error_panic_hook::set_once as set_panic_hook;
 use ybc::{
     Block, Box as YBox, Button, Buttons, Column, Columns, Container, Content, Delete as YDelete, HeaderSize, Hero, Icon, Image, ImageSize, Level,
     LevelItem, LevelLeft, Media, MediaContent, MediaLeft, Message, MessageBody, MessageHeader, Navbar, NavbarItem, NavbarItemTag, Notification,
-    Section, Subtitle, Table, Tag, Title,
+    Progress, Section, Subtitle, Table, Tag, Title,
 };
 use yew::prelude::*;
 
@@ -32,8 +32,6 @@ fn header() -> Html {
 
 #[function_component(SidebarMenu)]
 fn sidebar_menu() -> Html {
-    // Note: Pending confirmation whether raw li/a are acceptable inside MenuList; using placeholders
-    // for now.
     html! {
         <ybc::Menu>
             <ybc::MenuLabel text="General" />
@@ -90,6 +88,12 @@ pub fn app() -> Html {
                             <ContentSection />
                             <DeleteSection />
                             <FormSection />
+                            <IconSection />
+                            <ImagesSection />
+                            <NotificationsSection />
+                            <ProgressSection />
+                            <TableSection />
+                            <TagSection />
                         </Column>
                     </Columns>
                 </Container>
@@ -139,6 +143,549 @@ fn typography_section() -> Html {
     }
 }
 
+#[function_component(IconSection)]
+fn icon_section() -> Html {
+    html! {
+        <>
+            <div id="icon"></div>
+            <Section>
+                <Title tag="h1" size={HeaderSize::Is1}>{"Icon"}</Title>
+                <hr />
+                <Columns>
+                    <Column>
+                        <Icon size={Some(ybc::Size::Small)}>
+                            <i class="fa fa-home"></i>
+                        </Icon>
+                        {" "}
+                        <Icon>
+                            <i class="fa fa-home"></i>
+                        </Icon>
+                        {" "}
+                        <Icon size={Some(ybc::Size::Medium)}>
+                            <i class="fa fa-home"></i>
+                        </Icon>
+                        {" "}
+                        <Icon size={Some(ybc::Size::Large)}>
+                            <i class="fa fa-home"></i>
+                        </Icon>
+                    </Column>
+                </Columns>
+            </Section>
+        </>
+    }
+}
+
+#[function_component(ImagesSection)]
+fn images_section() -> Html {
+    html! {
+        <>
+            <div id="images"></div>
+            <Section>
+                <Title tag="h1" size={HeaderSize::Is1}>{"Images"}</Title>
+                <hr />
+                <div class="fixed-grid has-7-cols is-flex">
+                    <div class="grid is-align-items-center is-justify-content-center">
+                        // https://images.pexels.com/photos/33562244/pexels-photo-33562244.jpeg
+
+                        <div class="cell">
+                            <Image size={Some(ImageSize::Is16x16)}>
+                                <img alt="" src="https://placehold.net/1.png" />
+                            </Image>
+                        </div>
+                        <div class="cell">
+                            <Image size={Some(ImageSize::Is24x24)}>
+                                <img alt="" src="https://placehold.net/2.png" />
+                            </Image>
+                        </div>
+                        <div class="cell">
+                            <Image size={Some(ImageSize::Is32x32)}>
+                                <img alt="" src="https://placehold.net/5.png" />
+                            </Image>
+                        </div>
+                        <div class="cell">
+                            <Image size={Some(ImageSize::Is48x48)}>
+                                <img alt="" src="https://placehold.net/6.png" />
+                            </Image>
+                        </div>
+                        <div class="cell">
+                            <Image size={Some(ImageSize::Is64x64)}>
+                                <img alt="" src="https://placehold.net/7.png" />
+                            </Image>
+                        </div>
+                        <div class="cell">
+                            <Image size={Some(ImageSize::Is96x96)}>
+                                <img alt="" src="https://placehold.net/4.png" />
+                            </Image>
+                        </div>
+                        <div class="cell">
+                            <Image size={Some(ImageSize::Is128x128)}>
+                                <img alt="" src="https://placehold.net/3.png" />
+                            </Image>
+                        </div>
+
+
+
+
+
+
+                        <div class="cell">
+                            <Image size={Some(ImageSize::Is128x128)}>
+                                <img class="is-rounded" alt="" src="https://placehold.net/3.png" />
+                            </Image>
+                        </div>
+                        <div class="cell">
+                            <Image size={Some(ImageSize::Is96x96)}>
+                                <img class="is-rounded" alt="" src="https://placehold.net/4.png" />
+                            </Image>
+                        </div>
+                        <div class="cell">
+                            <Image size={Some(ImageSize::Is64x64)}>
+                                <img class="is-rounded" alt="" src="https://placehold.net/7.png" />
+                            </Image>
+                        </div>
+                        <div class="cell">
+                            <Image size={Some(ImageSize::Is48x48)}>
+                                <img class="is-rounded" alt="" src="https://placehold.net/6.png" />
+                            </Image>
+                        </div>
+                        <div class="cell">
+                            <Image size={Some(ImageSize::Is32x32)}>
+                                <img class="is-rounded" alt="" src="https://placehold.net/5.png" />
+                            </Image>
+                        </div>
+                        <div class="cell">
+                            <Image size={Some(ImageSize::Is24x24)}>
+                                <img class="is-rounded" alt="" src="https://placehold.net/2.png" />
+                            </Image>
+                        </div>
+                        <div class="cell">
+                            <Image size={Some(ImageSize::Is16x16)}>
+                                <img class="is-rounded" alt="" src="https://placehold.net/1.png" />
+                            </Image>
+                        </div>
+                    </div>
+                </div>
+            </Section>
+        </>
+    }
+}
+
+#[function_component(NotificationsSection)]
+fn notifications_section() -> Html {
+    html! {
+        <>
+            <div id="notifications"></div>
+            <Section>
+                <Title tag="h1" size={HeaderSize::Is1}>{"Notifications"}</Title>
+                <hr />
+                <Columns classes="is-multiline">
+                    <Column classes="is-half">
+                        <Notification>
+                            <YDelete />
+                            {"Lorem ipsum dolor sit amet, "}
+                            <a href="#">{"consectetur"}</a>
+                            {" adipiscing elit lorem ipsum dolor sit amet, consectetur adipiscing elit"}
+                        </Notification>
+                    </Column>
+                    <Column classes="is-half">
+                        <Notification classes="is-primary">
+                            <YDelete />
+                            {"Lorem ipsum dolor sit amet, "}
+                            <a href="#">{"consectetur"}</a>
+                            {" adipiscing elit lorem ipsum dolor sit amet, consectetur adipiscing elit"}
+                        </Notification>
+                    </Column>
+                    <Column classes="is-half">
+                        <Notification classes="is-link">
+                            <YDelete />
+                            {"Lorem ipsum dolor sit amet, "}
+                            <a href="#">{"consectetur"}</a>
+                            {" adipiscing elit lorem ipsum dolor sit amet, consectetur adipiscing elit"}
+                        </Notification>
+                    </Column>
+                    <Column classes="is-half">
+                        <Notification classes="is-info">
+                            <YDelete />
+                            {"Lorem ipsum dolor sit amet, "}
+                            <a href="#">{"consectetur"}</a>
+                            {" adipiscing elit lorem ipsum dolor sit amet, consectetur adipiscing elit"}
+                        </Notification>
+                    </Column>
+                    <Column classes="is-half">
+                        <Notification classes="is-success">
+                            <YDelete />
+                            {"Lorem ipsum dolor sit amet, "}
+                            <a href="#">{"consectetur"}</a>
+                            {" adipiscing elit lorem ipsum dolor sit amet, consectetur adipiscing elit"}
+                        </Notification>
+                    </Column>
+                    <Column classes="is-half">
+                        <Notification classes="is-warning">
+                            <YDelete />
+                            {"Lorem ipsum dolor sit amet, "}
+                            <a href="#">{"consectetur"}</a>
+                            {" adipiscing elit lorem ipsum dolor sit amet, consectetur adipiscing elit"}
+                        </Notification>
+                    </Column>
+                    <Column classes="is-half">
+                        <Notification classes="is-danger">
+                            <YDelete />
+                            {"Lorem ipsum dolor sit amet, "}
+                            <a href="#">{"consectetur"}</a>
+                            {" adipiscing elit lorem ipsum dolor sit amet, consectetur adipiscing elit"}
+                        </Notification>
+                    </Column>
+                </Columns>
+            </Section>
+        </>
+    }
+}
+
+#[function_component(ProgressSection)]
+fn progress_section() -> Html {
+    html! {
+        <>
+            <div id="progress"></div>
+            <Section>
+                <Title tag="h1" size={HeaderSize::Is1}>{"Progress"}</Title>
+                <hr />
+                <Progress classes="is-small" max={100.0} value={Some(14.3)} />
+                <Progress classes="is-small is-primary" max={100.0} value={Some(28.6)} />
+                <Progress classes="is-link" max={100.0} value={Some(42.9)} />
+                <Progress classes="is-info" max={100.0} value={Some(57.1)} />
+                <Progress classes="is-medium is-success" max={100.0} value={Some(71.4)} />
+                <Progress classes="is-medium is-warning" max={100.0} value={Some(85.7)} />
+                <Progress classes="is-large is-danger" max={100.0} value={Some(100.0)} />
+
+                <Title tag="h2" size={HeaderSize::Is2}>{"Indeterminate"}</Title>
+                <Progress classes="is-small is-primary" max={100.0} />
+                <Progress classes="is-danger" max={100.0} />
+                <Progress classes="is-medium is-dark" max={100.0} />
+                <Progress classes="is-large is-info" max={100.0} />
+            </Section>
+        </>
+    }
+}
+
+#[function_component(TableSection)]
+fn table_section() -> Html {
+    html! {
+        <>
+            <div id="table"></div>
+            <Section>
+                <Title tag="h1" size={HeaderSize::Is1}>{"Table"}</Title>
+                <hr />
+                <Table>
+                    <thead>
+                        <tr>
+                            <th><abbr title="Position">{"Pos"}</abbr></th>
+                            <th>{"Team"}</th>
+                            <th><abbr title="Played">{"Pld"}</abbr></th>
+                            <th><abbr title="Won">{"W"}</abbr></th>
+                            <th><abbr title="Drawn">{"D"}</abbr></th>
+                            <th><abbr title="Lost">{"L"}</abbr></th>
+                            <th><abbr title="Goals for">{"GF"}</abbr></th>
+                            <th><abbr title="Goals against">{"GA"}</abbr></th>
+                            <th><abbr title="Goal difference">{"GD"}</abbr></th>
+                            <th><abbr title="Points">{"Pts"}</abbr></th>
+                            <th>{"Qualification or relegation"}</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th><abbr title="Position">{"Pos"}</abbr></th>
+                            <th>{"Team"}</th>
+                            <th><abbr title="Played">{"Pld"}</abbr></th>
+                            <th><abbr title="Won">{"W"}</abbr></th>
+                            <th><abbr title="Drawn">{"D"}</abbr></th>
+                            <th><abbr title="Lost">{"L"}</abbr></th>
+                            <th><abbr title="Goals for">{"GF"}</abbr></th>
+                            <th><abbr title="Goals against">{"GA"}</abbr></th>
+                            <th><abbr title="Goal difference">{"GD"}</abbr></th>
+                            <th><abbr title="Points">{"Pts"}</abbr></th>
+                            <th>{"Qualification or relegation"}</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <tr>
+                            <th>{"1"}</th>
+                            <td>{"Leicester City "}<strong>{"(C)"}</strong></td>
+                            <td>{"38"}</td><td>{"23"}</td><td>{"12"}</td><td>{"3"}</td>
+                            <td>{"68"}</td><td>{"36"}</td><td>{"+32"}</td><td>{"81"}</td>
+                            <td>{"Qualification for the Champions League group stage"}</td>
+                        </tr>
+                        <tr>
+                            <th>{"2"}</th>
+                            <td>{"Arsenal"}</td>
+                            <td>{"38"}</td><td>{"20"}</td><td>{"11"}</td><td>{"7"}</td>
+                            <td>{"65"}</td><td>{"36"}</td><td>{"+29"}</td><td>{"71"}</td>
+                            <td>{"Qualification for the Champions League group stage"}</td>
+                        </tr>
+                        <tr>
+                            <th>{"3"}</th>
+                            <td>{"Tottenham Hotspur"}</td>
+                            <td>{"38"}</td><td>{"19"}</td><td>{"13"}</td><td>{"6"}</td>
+                            <td>{"69"}</td><td>{"35"}</td><td>{"+34"}</td><td>{"70"}</td>
+                            <td>{"Qualification for the Champions League group stage"}</td>
+                        </tr>
+                        <tr>
+                            <th>{"4"}</th>
+                            <td>{"Manchester City"}</td>
+                            <td>{"38"}</td><td>{"19"}</td><td>{"9"}</td><td>{"10"}</td>
+                            <td>{"71"}</td><td>{"41"}</td><td>{"+30"}</td><td>{"66"}</td>
+                            <td>{"Qualification for the Champions League play-off round"}</td>
+                        </tr>
+                        <tr class="is-selected">
+                            <th>{"5"}</th>
+                            <td>{"Manchester United"}</td>
+                            <td>{"38"}</td><td>{"19"}</td><td>{"9"}</td><td>{"10"}</td>
+                            <td>{"49"}</td><td>{"35"}</td><td>{"+14"}</td><td>{"66"}</td>
+                            <td>{"Qualification for the Europa League group stage"}</td>
+                        </tr>
+                        <tr>
+                            <th>{"6"}</th>
+                            <td>{"Southampton"}</td>
+                            <td>{"38"}</td><td>{"18"}</td><td>{"9"}</td><td>{"11"}</td>
+                            <td>{"59"}</td><td>{"41"}</td><td>{"+18"}</td><td>{"63"}</td>
+                            <td>{"Qualification for the Europa League group stage"}</td>
+                        </tr>
+                        <tr>
+                            <th>{"7"}</th>
+                            <td>{"West Ham United"}</td>
+                            <td>{"38"}</td><td>{"16"}</td><td>{"14"}</td><td>{"8"}</td>
+                            <td>{"65"}</td><td>{"51"}</td><td>{"+14"}</td><td>{"62"}</td>
+                            <td>{"Qualification for the Europa League third qualifying round"}</td>
+                        </tr>
+                        <tr>
+                            <th>{"8"}</th>
+                            <td>{"Liverpool"}</td>
+                            <td>{"38"}</td><td>{"16"}</td><td>{"12"}</td><td>{"10"}</td>
+                            <td>{"63"}</td><td>{"50"}</td><td>{"+13"}</td><td>{"60"}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>{"9"}</th>
+                            <td>{"Stoke City"}</td>
+                            <td>{"38"}</td><td>{"14"}</td><td>{"9"}</td><td>{"15"}</td>
+                            <td>{"41"}</td><td>{"55"}</td><td>{"−14"}</td><td>{"51"}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>{"10"}</th>
+                            <td>{"Chelsea"}</td>
+                            <td>{"38"}</td><td>{"12"}</td><td>{"14"}</td><td>{"12"}</td>
+                            <td>{"59"}</td><td>{"53"}</td><td>{"+6"}</td><td>{"50"}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>{"11"}</th>
+                            <td>{"Everton"}</td>
+                            <td>{"38"}</td><td>{"11"}</td><td>{"14"}</td><td>{"13"}</td>
+                            <td>{"59"}</td><td>{"55"}</td><td>{"+4"}</td><td>{"47"}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>{"12"}</th>
+                            <td>{"Swansea City"}</td>
+                            <td>{"38"}</td><td>{"12"}</td><td>{"11"}</td><td>{"15"}</td>
+                            <td>{"42"}</td><td>{"52"}</td><td>{"−10"}</td><td>{"47"}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>{"13"}</th>
+                            <td>{"Watford"}</td>
+                            <td>{"38"}</td><td>{"12"}</td><td>{"9"}</td><td>{"17"}</td>
+                            <td>{"40"}</td><td>{"50"}</td><td>{"−10"}</td><td>{"45"}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>{"14"}</th>
+                            <td>{"West Bromwich Albion"}</td>
+                            <td>{"38"}</td><td>{"10"}</td><td>{"13"}</td><td>{"15"}</td>
+                            <td>{"34"}</td><td>{"48"}</td><td>{"−14"}</td><td>{"43"}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>{"15"}</th>
+                            <td>{"Crystal Palace"}</td>
+                            <td>{"38"}</td><td>{"11"}</td><td>{"9"}</td><td>{"18"}</td>
+                            <td>{"39"}</td><td>{"51"}</td><td>{"−12"}</td><td>{"42"}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>{"16"}</th>
+                            <td>{"AFC Bournemouth"}</td>
+                            <td>{"38"}</td><td>{"11"}</td><td>{"9"}</td><td>{"18"}</td>
+                            <td>{"45"}</td><td>{"67"}</td><td>{"−22"}</td><td>{"42"}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>{"17"}</th>
+                            <td>{"Sunderland"}</td>
+                            <td>{"38"}</td><td>{"9"}</td><td>{"12"}</td><td>{"17"}</td>
+                            <td>{"48"}</td><td>{"62"}</td><td>{"−14"}</td><td>{"39"}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>{"18"}</th>
+                            <td>{"Newcastle United "}<strong>{"(R)"}</strong></td>
+                            <td>{"38"}</td><td>{"9"}</td><td>{"10"}</td><td>{"19"}</td>
+                            <td>{"44"}</td><td>{"65"}</td><td>{"−21"}</td><td>{"37"}</td>
+                            <td>{"Relegation to the Football League Championship"}</td>
+                        </tr>
+                        <tr>
+                            <th>{"19"}</th>
+                            <td>{"Norwich City "}<strong>{"(R)"}</strong></td>
+                            <td>{"38"}</td><td>{"9"}</td><td>{"7"}</td><td>{"22"}</td>
+                            <td>{"39"}</td><td>{"67"}</td><td>{"−28"}</td><td>{"34"}</td>
+                            <td>{"Relegation to the Football League Championship"}</td>
+                        </tr>
+                        <tr>
+                            <th>{"20"}</th>
+                            <td>{"Aston Villa "}<strong>{"(R)"}</strong></td>
+                            <td>{"38"}</td><td>{"3"}</td><td>{"8"}</td><td>{"27"}</td>
+                            <td>{"27"}</td><td>{"76"}</td><td>{"−49"}</td><td>{"17"}</td>
+                            <td>{"Relegation to the Football League Championship"}</td>
+                        </tr>
+                    </tbody>
+                </Table>
+                <br />
+                <Table striped=true>
+                    <thead><tr><th>{"One"}</th><th>{"Two"}</th></tr></thead>
+                    <tbody>
+                        <tr><td>{"Three"}</td><td>{"Four"}</td></tr>
+                        <tr><td>{"Five"}</td><td>{"Six"}</td></tr>
+                        <tr><td>{"Seven"}</td><td>{"Eight"}</td></tr>
+                        <tr><td>{"Nine"}</td><td>{"Ten"}</td></tr>
+                        <tr><td>{"Eleven"}</td><td>{"Twelve"}</td></tr>
+                    </tbody>
+                </Table>
+                <br />
+                <Table bordered=true>
+                    <thead><tr><th>{"One"}</th><th>{"Two"}</th></tr></thead>
+                    <tbody><tr><td>{"Three"}</td><td>{"Four"}</td></tr></tbody>
+                </Table>
+                <br />
+                <Table narrow=true>
+                    <thead><tr><th>{"One"}</th><th>{"Two"}</th></tr></thead>
+                    <tbody>
+                        <tr><td>{"Three"}</td><td>{"Four"}</td></tr>
+                        <tr><td>{"Five"}</td><td>{"Six"}</td></tr>
+                        <tr><td>{"Seven"}</td><td>{"Eight"}</td></tr>
+                        <tr><td>{"Nine"}</td><td>{"Ten"}</td></tr>
+                        <tr><td>{"Eleven"}</td><td>{"Twelve"}</td></tr>
+                    </tbody>
+                </Table>
+                <br />
+                <Table bordered=true striped=true narrow=true>
+                    <thead><tr><th>{"One"}</th><th>{"Two"}</th></tr></thead>
+                    <tbody>
+                        <tr><td>{"Three"}</td><td>{"Four"}</td></tr>
+                        <tr><td>{"Five"}</td><td>{"Six"}</td></tr>
+                        <tr><td>{"Seven"}</td><td>{"Eight"}</td></tr>
+                        <tr><td>{"Nine"}</td><td>{"Ten"}</td></tr>
+                        <tr><td>{"Eleven"}</td><td>{"Twelve"}</td></tr>
+                    </tbody>
+                </Table>
+            </Section>
+        </>
+    }
+}
+
+#[function_component(TagSection)]
+fn tag_section() -> Html {
+    html! {
+        <>
+            <div id="tag"></div>
+            <Section>
+                <Title tag="h1" size={HeaderSize::Is1}>{"Tag"}</Title>
+                <hr />
+                <div class="tags">
+                    <Tag classes="is-primary">{"Primary"}</Tag>
+                    <Tag classes="is-link">{"Link"}</Tag>
+                    <Tag classes="is-info">{"Info"}</Tag>
+                    <Tag classes="is-success">{"Success"}</Tag>
+                    <Tag classes="is-warning">{"Warning"}</Tag>
+                    <Tag classes="is-danger">{"Danger"}</Tag>
+                    <Tag classes="is-white">{"White"}</Tag>
+                    <Tag classes="is-black">{"Black"}</Tag>
+                    <Tag classes="is-light">{"Light"}</Tag>
+                    <Tag classes="is-dark">{"Dark"}</Tag>
+                    <Tag classes="is-primary is-medium">{"Medium"}</Tag>
+                    <Tag classes="is-info is-large">{"Large"}</Tag>
+                    <Tag classes="is-success">{"Bar"}<YDelete classes="is-small" /></Tag>
+                    <Tag classes="is-warning is-medium">{"Hello"}<YDelete classes="is-small" /></Tag>
+                    <Tag classes="is-danger is-large">{"World"}<YDelete /></Tag>
+                </div>
+                <ybc::Field grouped=true multiline=true>
+                    <ybc::Control>
+                        <ybc::Tags has_addons=true>
+                            <Tag classes="is-dark">{"npm"}</Tag>
+                            <Tag classes="is-info">{"0.5.0"}</Tag>
+                        </ybc::Tags>
+                    </ybc::Control>
+                    <ybc::Control>
+                        <ybc::Tags has_addons=true>
+                            <Tag classes="is-dark">{"build"}</Tag>
+                            <Tag classes="is-success">{"passing"}</Tag>
+                        </ybc::Tags>
+                    </ybc::Control>
+                    <ybc::Control>
+                        <ybc::Tags has_addons=true>
+                            <Tag classes="is-dark">{"chat"}</Tag>
+                            <Tag classes="is-primary">{"on gitter"}</Tag>
+                        </ybc::Tags>
+                    </ybc::Control>
+                </ybc::Field>
+                <ybc::Field grouped=true multiline=true>
+                    <ybc::Control>
+                        <ybc::Tags has_addons=true>
+                            <Tag tag={"a".to_string()} classes="is-link">{"Technology"}</Tag>
+                            <Tag tag={"a".to_string()} delete=true classes="is-delete"></Tag>
+                        </ybc::Tags>
+                    </ybc::Control>
+                    <ybc::Control>
+                        <ybc::Tags has_addons=true>
+                            <Tag tag={"a".to_string()} classes="is-link">{"CSS"}</Tag>
+                            <Tag tag={"a".to_string()} delete=true classes="is-delete"></Tag>
+                        </ybc::Tags>
+                    </ybc::Control>
+                    <ybc::Control>
+                        <ybc::Tags has_addons=true>
+                            <Tag tag={"a".to_string()} classes="is-link">{"Flexbox"}</Tag>
+                            <Tag tag={"a".to_string()} delete=true classes="is-delete"></Tag>
+                        </ybc::Tags>
+                    </ybc::Control>
+                    <ybc::Control>
+                        <ybc::Tags has_addons=true>
+                            <Tag tag={"a".to_string()} classes="is-link">{"Web Design"}</Tag>
+                            <Tag tag={"a".to_string()} delete=true classes="is-delete"></Tag>
+                        </ybc::Tags>
+                    </ybc::Control>
+                    <ybc::Control>
+                        <ybc::Tags has_addons=true>
+                            <Tag tag={"a".to_string()} classes="is-link">{"Open Source"}</Tag>
+                            <Tag tag={"a".to_string()} delete=true classes="is-delete"></Tag>
+                        </ybc::Tags>
+                    </ybc::Control>
+                    <ybc::Control>
+                        <ybc::Tags has_addons=true>
+                            <Tag tag={"a".to_string()} classes="is-link">{"Community"}</Tag>
+                            <Tag tag={"a".to_string()} delete=true classes="is-delete"></Tag>
+                        </ybc::Tags>
+                    </ybc::Control>
+                    <ybc::Control>
+                        <ybc::Tags has_addons=true>
+                            <Tag tag={"a".to_string()} classes="is-link">{"Documentation"}</Tag>
+                            <Tag tag={"a".to_string()} delete=true classes="is-delete"></Tag>
+                        </ybc::Tags>
+                    </ybc::Control>
+                </ybc::Field>
+            </Section>
+        </>
+    }
+}
+
 #[function_component(BoxSection)]
 fn box_section() -> Html {
     html! {
@@ -151,7 +698,6 @@ fn box_section() -> Html {
                     <Media>
                         <MediaLeft>
                             <Image size={Some(ImageSize::Is64x64)}>
-                                // <img alt="Image" src="https://images.pexels.com/photos/33562244/pexels-photo-33562244.jpeg" />
                                 <img alt="Image" src="https://placehold.net/avatar-2.svg" />
                             </Image>
                         </MediaLeft>
