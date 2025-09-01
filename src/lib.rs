@@ -42,7 +42,7 @@ pub use components::dropdown::{Dropdown, DropdownMsg, DropdownProps};
 pub use components::menu::{Menu, MenuLabel, MenuLabelProps, MenuList, MenuListProps, MenuProps};
 pub use components::message::{Message, MessageBody, MessageBodyProps, MessageHeader, MessageHeaderProps, MessageProps};
 pub use components::modal::{
-    use_modal, Modal, ModalCard, ModalCardProps, ModalCloseMsg, ModalContext, ModalMsg, ModalProps, ModalProvider, ModalProviderProps, UseModalHandle,
+    Modal, ModalCard, ModalCardProps, ModalCloseMsg, ModalContext, ModalMsg, ModalProps, ModalProvider, ModalProviderProps, UseModalHandle, use_modal,
 };
 pub use components::navbar::{
     Navbar, NavbarDivider, NavbarDividerProps, NavbarDropdown, NavbarDropdownProps, NavbarFixed, NavbarItem, NavbarItemProps, NavbarItemTag,
@@ -56,6 +56,7 @@ pub use components::tabs::{Tab, Tabs, TabsProps};
 
 // elements
 pub use elements::block::{Block, BlockProps};
+pub use elements::r#box::{BBox, BBoxProps};
 pub use elements::button::{
     Button, ButtonAnchor, ButtonAnchorProps, ButtonAnchorRouter, ButtonGroupSize, ButtonInputReset, ButtonInputResetProps, ButtonInputSubmit,
     ButtonInputSubmitProps, ButtonProps, ButtonRouter, ButtonRouterProps, Buttons, ButtonsProps,
@@ -66,7 +67,6 @@ pub use elements::icon::{Icon, IconProps};
 pub use elements::image::{Image, ImageProps, ImageSize};
 pub use elements::notification::{Notification, NotificationProps};
 pub use elements::progress::{Progress, ProgressProps};
-pub use elements::r#box::{Box, BoxProps};
 pub use elements::table::{Table, TableProps};
 pub use elements::tag::{Tag, TagProps, Tags, TagsProps};
 pub use elements::title::{HeaderSize, Subtitle, SubtitleProps, Title, TitleProps};
