@@ -56,22 +56,17 @@ pub fn app() -> Html {
 
 #[function_component(Header)]
 fn header() -> Html {
-    // Navbar (primary) with brand "Bulma"
-    let navbrand = html! {
-        <>
-            <NavbarItem tag={NavbarItemTag::A} href={"#".to_string()}>
-                {"Bulma"}
-            </NavbarItem>
-        </>
-    };
-
     html! {
         <>
-            <Navbar classes="is-primary" padded=true navbrand={navbrand} />
+            <Navbar classes="is-primary" padded=true navbrand={html! {
+                <NavbarItem tag={NavbarItemTag::A} href={"#".to_string()}>
+                    {"Bulma"}
+                </NavbarItem>
+            }} />
             <Hero classes="is-primary" body={html!{
-                <Container>
+                <Container classes="has-text-centered">
                     <Title size={HeaderSize::Is1}>{"Bulma Yew"}</Title>
-                    <Subtitle size={HeaderSize::Is3}>{"Subtitle"}</Subtitle>
+                    <Subtitle size={HeaderSize::Is2}>{"Subtitle"}</Subtitle>
                 </Container>
             }} />
         </>
