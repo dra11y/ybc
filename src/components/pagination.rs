@@ -51,7 +51,6 @@ pub fn pagination(props: &PaginationProps) -> Html {
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
 
 #[derive(Clone, Debug, Properties, PartialEq)]
 pub struct PaginationItemProps {
@@ -80,7 +79,7 @@ pub fn pagination_item(props: &PaginationItemProps) -> Html {
 
 /// A pagination item type.
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
-#[display("pagination-{}")]
+#[display("pagination-{_variant}")]
 pub enum PaginationItemType {
     /// A pagination link for a specific page number.
     #[display("link")]
@@ -93,7 +92,6 @@ pub enum PaginationItemType {
     Previous,
 }
 
-//////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
 /// Properties of [`PaginationEllipsis`] component.
@@ -113,14 +111,13 @@ pub fn pagination_ellipsis(props: &PaginationEllipsisProps) -> Html {
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
 
 #[cfg(feature = "router")]
 mod router {
     use super::*;
     use serde::Serialize;
-    use yew_router::components::Link;
     use yew_router::Routable;
+    use yew_router::components::Link;
 
     #[derive(Clone, Properties, PartialEq)]
     pub struct RouterProps<R: Routable + Clone + PartialEq + 'static> {

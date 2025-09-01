@@ -1,18 +1,12 @@
-$purple: #8a4d76;
-$pink: #fa7c91;
-$brown: #757763;
-$beige-light: #d0d1cd;
-$beige-lighter: #eff0eb;
+@use "../bulma/helpers/flexbox" as *;
+@use "../bulma/utilities/functions" as *;
 
-@use "../sass" with (
+// Path to Bulma's sass folder
+@use "../bulma" with (
     $family-primary: '"Nunito", sans-serif',
-    $grey-dark: $brown,
-    $grey-light: $beige-light,
-    $primary: $purple,
-    $link: $pink,
-    $control-border-width: 2px,
-    $input-shadow: none,
-    $modal-card-head-background-color: 'green',
+    $primary: rgb(55, 90, 127),
+    // $control-border-width: 2px,
+    // $input-shadow: none
 );
 
-@import url("https://fonts.googleapis.com/css?family=Nunito:400,700");
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,700")

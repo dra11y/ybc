@@ -37,7 +37,6 @@ pub fn title(props: &TitleProps) -> Html {
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
 
 #[derive(Clone, Debug, Properties, PartialEq)]
 pub struct SubtitleProps {
@@ -70,7 +69,7 @@ pub fn subtitle(props: &SubtitleProps) -> Html {
 ///
 /// https://bulma.io/documentation/elements/title/#sizes
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
-#[display("is-{}")]
+#[display("is-{_variant}")]
 pub enum HeaderSize {
     #[display("1")]
     Is1,

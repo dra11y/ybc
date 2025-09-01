@@ -3,10 +3,10 @@
 Goal: Rebuild `examples/theme/template.html` using only ybc components so the page renders visually identical. Theme colors and tweaks come only from `styles.scss` (no source changes for styling).
 
 ## Ground rules
-- Use ybc components exclusively; no raw Bulma HTML wrappers
+- Use ybc components exclusively; import, don't qualify; no raw Bulma HTML wrappers
 - Match layout, sizes, colors, and behaviors (burger, dropdowns, modals)
 - Keep interactivity in Rust components; remove template JS/jQuery/GA
-- User is running `trunk serve` in background; no need for `cargo build` or `trunk serve`; DO run `cargo check` to check syntax at each phase.
+- User is running `trunk serve` in background; no need for `cargo build/check` or `trunk serve`; DO run `trunk build` to check syntax at each phase.
 - Do one section at a time; verify with user, then mark step as DONE, then commit changes with appropriate commit message.
 
 ## Section order (mirrors template)
@@ -70,3 +70,5 @@ Each step: implement → compare with template → adjust classes/props → comm
 - Navbar helpers: optional `NavbarBrandLogo` shorthand for common brand+logo pattern
 - Typographic sugar: `TitleGroup` for paired Title + Subtitle with `is-spaced`
 - Example docs: short README in `examples/theme/` explaining how to toggle modal and dropdowns
+ - Sticky/fixed sidebar: explore Bulma helpers or minimal CSS to keep left menu fixed while scrolling
+- Should all components accept `id` prop?

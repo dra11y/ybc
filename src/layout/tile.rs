@@ -46,7 +46,7 @@ pub fn tile(props: &TileProps) -> Html {
 ///
 /// https://bulma.io/documentation/layout/tiles/#modifiers
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
-#[display("is-{}")]
+#[display("is-{_variant}")]
 pub enum TileCtx {
     #[display("ancestor")]
     Ancestor,
@@ -60,7 +60,7 @@ pub enum TileCtx {
 ///
 /// https://bulma.io/documentation/layout/tiles/#modifiers
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
-#[display("is-{}")]
+#[display("is-{_variant}")]
 pub enum TileSize {
     #[display("1")]
     One,

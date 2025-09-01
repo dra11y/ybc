@@ -22,7 +22,8 @@ pub struct NavbarProps {
     /// [https://bulma.io/documentation/components/navbar/#transparent-navbar](https://bulma.io/documentation/components/navbar/#transparent-navbar)
     #[prop_or_default]
     pub transparent: bool,
-    /// Sets **top** and **bottom** paddings with **1rem**, **left** and **right** paddings with **2rem**.
+    /// Sets **top** and **bottom** paddings with **1rem**, **left** and **right** paddings with
+    /// **2rem**.
     ///
     /// [https://bulma.io/documentation/components/navbar/#navbar-helper-classes](https://bulma.io/documentation/components/navbar/#navbar-helper-classes)
     #[prop_or_default]
@@ -156,7 +157,7 @@ impl Component for Navbar {
 /// NOTE WELL: in order to work properly, the root `html` or `body` element must be configured with
 /// the corresponding `has-navbar-fixed-top` or `has-navbar-fixed-bottom` class.
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
-#[display("is-{}")]
+#[display("is-{_variant}")]
 pub enum NavbarFixed {
     #[display("fixed-top")]
     Top,
@@ -164,7 +165,6 @@ pub enum NavbarFixed {
     Bottom,
 }
 
-//////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
 /// The two HTML tags allowed for a navbar-item.
@@ -248,7 +248,6 @@ pub fn navbar_item(props: &NavbarItemProps) -> Html {
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
 
 #[derive(Clone, Debug, Properties, PartialEq)]
 pub struct NavbarDividerProps {
@@ -264,7 +263,6 @@ pub fn navbar_divider(props: &NavbarDividerProps) -> Html {
     html! { <hr class={classes!("navbar-divider", props.classes.clone())} /> }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
 #[derive(Clone, Debug, Properties, PartialEq)]

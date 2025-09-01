@@ -30,7 +30,7 @@ pub fn buttons(props: &ButtonsProps) -> Html {
 ///
 /// https://bulma.io/documentation/elements/button/#sizes
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
-#[display("are-{}")]
+#[display("are-{_variant}")]
 pub enum ButtonGroupSize {
     #[display("small")]
     Small,
@@ -86,8 +86,8 @@ pub fn button(props: &ButtonProps) -> Html {
 mod router {
     use super::*;
     use serde::Serialize;
-    use yew_router::components::Link;
     use yew_router::Routable;
+    use yew_router::components::Link;
 
     #[derive(Clone, Properties, PartialEq)]
     pub struct ButtonRouterProps<R: Routable + Clone + PartialEq + 'static> {

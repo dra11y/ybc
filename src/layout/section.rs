@@ -29,7 +29,7 @@ pub fn section(props: &SectionProps) -> Html {
 ///
 /// [https://bulma.io/documentation/layout/section/](https://bulma.io/documentation/layout/section/)
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
-#[display("is-{}")]
+#[display("is-{_variant}")]
 pub enum SectionSize {
     #[display("medium")]
     Medium,

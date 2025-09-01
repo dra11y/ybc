@@ -80,7 +80,7 @@ pub fn hero(props: &HeroProps) -> Html {
 ///
 /// [https://bulma.io/documentation/layout/hero/#sizes](https://bulma.io/documentation/layout/hero/#sizes)
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
-#[display("is-{}")]
+#[display("is-{_variant}")]
 pub enum HeroSize {
     #[display("medium")]
     Medium,

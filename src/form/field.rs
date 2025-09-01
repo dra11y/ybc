@@ -124,7 +124,7 @@ pub fn field(props: &FieldProps) -> Html {
 ///
 /// https://bulma.io/documentation/form/general/
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
-#[display("has-addons-{}")]
+#[display("has-addons-{_variant}")]
 pub enum AddonsAlign {
     #[display("centered")]
     Centered,
@@ -136,7 +136,7 @@ pub enum AddonsAlign {
 ///
 /// https://bulma.io/documentation/form/general/
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
-#[display("is-grouped-{}")]
+#[display("is-grouped-{_variant}")]
 pub enum GroupedAlign {
     #[display("centered")]
     Centered,
@@ -148,7 +148,7 @@ pub enum GroupedAlign {
 ///
 /// https://bulma.io/documentation/form/general/#horizontal-form
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
-#[display("is-{}")]
+#[display("is-{_variant}")]
 pub enum LabelSize {
     #[display("small")]
     Small,

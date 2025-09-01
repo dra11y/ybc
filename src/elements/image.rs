@@ -29,7 +29,7 @@ pub fn image(props: &ImageProps) -> Html {
 ///
 /// https://bulma.io/documentation/elements/image/
 #[derive(Clone, Debug, Display, PartialEq, Eq)]
-#[display("is-{}")]
+#[display("is-{_variant}")]
 pub enum ImageSize {
     #[display("16x16")]
     Is16x16,
