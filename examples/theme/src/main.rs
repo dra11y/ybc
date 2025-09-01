@@ -103,6 +103,7 @@ pub fn app() -> Html {
                             <MessageSection />
                             <ModalSection />
                             <NavbarSection />
+                            <PanelSection />
                         </Column>
                     </Columns>
                 </Container>
@@ -725,6 +726,91 @@ fn navbar_section() -> Html {
                 <Navbar classes="is-dark" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
                 <br />
                 <Navbar classes="is-transparent" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+            </Section>
+        </>
+    }
+}
+
+#[function_component(PanelSection)]
+fn panel_section() -> Html {
+    let active = use_state(|| "all".to_string());
+    let on_all = {
+        let active = active.clone();
+        Callback::from(move |_| active.set("all".to_string()))
+    };
+    let on_public = {
+        let active = active.clone();
+        Callback::from(move |_| active.set("public".to_string()))
+    };
+    let on_private = {
+        let active = active.clone();
+        Callback::from(move |_| active.set("private".to_string()))
+    };
+    let on_sources = {
+        let active = active.clone();
+        Callback::from(move |_| active.set("sources".to_string()))
+    };
+    let on_forks = {
+        let active = active.clone();
+        Callback::from(move |_| active.set("forks".to_string()))
+    };
+
+    html! {
+        <>
+            <div id="panel"></div>
+            <Section>
+                <Title tag="h1">{"Panel"}</Title>
+                <hr />
+                <ybc::Panel heading={html!{"Repositories"}}>
+                    <ybc::PanelTabs>
+                        <a class={classes!((*active == "all").then_some("is-active"))} onclick={on_all}>{"All"}</a>
+                        <a class={classes!((*active == "public").then_some("is-active"))} onclick={on_public}>{"Public"}</a>
+                        <a class={classes!((*active == "private").then_some("is-active"))} onclick={on_private}>{"Private"}</a>
+                        <a class={classes!((*active == "sources").then_some("is-active"))} onclick={on_sources}>{"Sources"}</a>
+                        <a class={classes!((*active == "forks").then_some("is-active"))} onclick={on_forks}>{"Forks"}</a>
+                    </ybc::PanelTabs>
+
+                    <ybc::PanelBlock>
+                        <p class="control has-icons-left">
+                            <input class="input" type="text" placeholder="Search" />
+                            <span class="icon is-left"><i class="fas fa-search" aria-hidden="true"></i></span>
+                        </p>
+                    </ybc::PanelBlock>
+
+                    <ybc::PanelBlock active=true>
+                        <span class="panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span>
+                        <span>{"bulma"}</span>
+                    </ybc::PanelBlock>
+                    <ybc::PanelBlock>
+                        <span class="panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span>
+                        <span>{"marksheet"}</span>
+                    </ybc::PanelBlock>
+                    <ybc::PanelBlock>
+                        <span class="panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span>
+                        <span>{"minireset.css"}</span>
+                    </ybc::PanelBlock>
+                    <ybc::PanelBlock>
+                        <span class="panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span>
+                        <span>{"jgthms.github.io"}</span>
+                    </ybc::PanelBlock>
+                    <ybc::PanelBlock>
+                        <span class="panel-icon"><i class="fas fa-code-branch" aria-hidden="true"></i></span>
+                        <span>{"danielroseman/streaming"}</span>
+                    </ybc::PanelBlock>
+                    <ybc::PanelBlock>
+                        <span class="panel-icon"><i class="fas fa-code-branch" aria-hidden="true"></i></span>
+                        <span>{"mojs"}</span>
+                    </ybc::PanelBlock>
+
+                    <ybc::PanelBlock tag={"label".to_string()}>
+                        <input type="checkbox" />
+                        <span>{"Remember me"}</span>
+                    </ybc::PanelBlock>
+
+                    <ybc::PanelBlock>
+                        <Button classes="is-link is-outlined is-fullwidth">{"Reset all filters"}</Button>
+                    </ybc::PanelBlock>
+                </ybc::Panel>
             </Section>
         </>
     }
