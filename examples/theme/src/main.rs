@@ -100,6 +100,9 @@ pub fn app() -> Html {
                             <DropdownSection />
                             <MediaSection />
                             <MenuSection />
+                            <MessageSection />
+                            <ModalSection />
+                            <NavbarSection />
                         </Column>
                     </Columns>
                 </Container>
@@ -505,6 +508,228 @@ fn menu_section() -> Html {
     }
 }
 
+#[function_component(MessageSection)]
+fn message_section() -> Html {
+    let variants = vec![
+        ("", "Message"),
+        ("is-primary", "Primary"),
+        ("is-link", "Link"),
+        ("is-info", "Info"),
+        ("is-success", "Success"),
+        ("is-warning", "Warning"),
+        ("is-danger", "Danger"),
+        ("is-white", "White"),
+        ("is-black", "Black"),
+        ("is-light", "Light"),
+        ("is-dark", "Dark"),
+    ];
+    html! {
+        <>
+            <div id="message"></div>
+            <Section>
+                <Title tag="h1">{"Message"}</Title>
+                <hr />
+                <Columns classes="is-multiline">
+                    { for variants.into_iter().map(|(class, title)| html!{
+                        <Column classes="is-half">
+                            <Message classes={class}>
+                                <MessageHeader>
+                                    <p>{title}</p>
+                                    <YDelete />
+                                </MessageHeader>
+                                <MessageBody>
+                                    {"Lorem ipsum dolor sit amet, consectetur adipiscing elit. "}
+                                    <strong>{"Pellentesque risus mi"}</strong>
+                                    {", tempus quis placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum "}
+                                    <a>{"felis venenatis"}</a>
+                                    {" efficitur. Aenean ac "}
+                                    <em>{"eleifend lacus"}</em>
+                                    {"."}
+                                </MessageBody>
+                            </Message>
+                        </Column>
+                    }) }
+                </Columns>
+            </Section>
+        </>
+    }
+}
+
+#[function_component(ModalSection)]
+fn modal_section() -> Html {
+    let handle_basic = ybc::use_modal();
+    let handle_card = ybc::use_modal();
+    html! {
+        <>
+            <div id="modal"></div>
+            <Section>
+                <Title tag="h1">{"Modal"}</Title>
+                <hr />
+                <div class="buttons">
+                    <Button classes="is-primary is-large" onclick={handle_basic.open_callback()}>{"Launch basic modal"}</Button>
+                    <Button classes="is-info is-large" onclick={handle_card.open_callback()}>{"Launch modal card"}</Button>
+                </div>
+
+                <ybc::Modal id={"basicModal".to_string()} handle={handle_basic.clone()}>
+                    <ybc::Card>
+                        <ybc::CardContent>
+                            <Content>
+                                <Title size={HeaderSize::Is4}>{"Modal Content"}</Title>
+                                <p>{"This is a basic modal using the Modal component. It includes a card for proper spacing and visual hierarchy."}</p>
+                                <p>{"You can click the background or the X button to close this modal."}</p>
+                            </Content>
+                        </ybc::CardContent>
+                    </ybc::Card>
+                </ybc::Modal>
+
+                <ybc::ModalCard
+                    id={"myModal".to_string()}
+                    handle={handle_card.clone()}
+                    title={"Modal title".to_string()}
+                    body={html!{<>
+                        {"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "}
+                        {"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "}
+                        {"Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. "}
+                        {"Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}
+                    </>}}
+                    footer={html!{
+                        <>
+                            <Button classes="is-primary" onclick={handle_card.close_callback()}>{"Save changes"}</Button>
+                            <Button onclick={handle_card.close_callback()}>{"Cancel"}</Button>
+                        </>
+                    }}
+                />
+            </Section>
+        </>
+    }
+}
+
+#[function_component(NavbarSection)]
+fn navbar_section() -> Html {
+    let brand = html! {
+        <NavbarItem tag={NavbarItemTag::A} href={"https://bulma.io".to_string()}>
+            <img src="https://bulma.io/images/bulma-logo.png" alt="Bulma" width="112" height="28" />
+        </NavbarItem>
+    };
+    let navstart = html! {
+        <>
+            <NavbarItem tag={NavbarItemTag::A} href={"#".to_string()}>{"Home"}</NavbarItem>
+            <ybc::NavbarDropdown hoverable=true navlink={html!{<span class="is-active">{"Docs"}</span>}}>
+                <NavbarItem tag={NavbarItemTag::A} href={"#".to_string()}>{"Overview"}</NavbarItem>
+                <NavbarItem tag={NavbarItemTag::A} href={"#".to_string()}>{"Modifiers"}</NavbarItem>
+                <NavbarItem tag={NavbarItemTag::A} href={"#".to_string()}>{"Grid"}</NavbarItem>
+                <NavbarItem tag={NavbarItemTag::A} href={"#".to_string()}>{"Form"}</NavbarItem>
+                <NavbarItem tag={NavbarItemTag::A} href={"#".to_string()}>{"Elements"}</NavbarItem>
+                <NavbarItem classes="is-active" tag={NavbarItemTag::A} href={"#".to_string()}>{"Components"}</NavbarItem>
+                <NavbarItem tag={NavbarItemTag::A} href={"#".to_string()}>{"Layout"}</NavbarItem>
+                <ybc::NavbarDivider />
+                <NavbarItem>
+                    <div>{"version"}
+                        <p class="has-text-info is-size-6-desktop">{"0.4.3"}</p>
+                    </div>
+                </NavbarItem>
+            </ybc::NavbarDropdown>
+            <ybc::NavbarDropdown hoverable=true navlink={html!{"Blog"}}>
+                <NavbarItem>
+                    <div class="navbar-content">
+                        <p><small class="has-text-info">{"10 Mar 2017"}</small></p>
+                        <p>{"New field element (for better controls)"}</p>
+                    </div>
+                </NavbarItem>
+                <NavbarItem>
+                    <div class="navbar-content">
+                        <p><small class="has-text-info">{"11 Apr 2016"}</small></p>
+                        <p>{"Metro UI CSS grid with Bulma tiles"}</p>
+                    </div>
+                </NavbarItem>
+                <NavbarItem>
+                    <div class="navbar-content">
+                        <p><small class="has-text-info">{"09 Feb 2016"}</small></p>
+                        <p>{"Blog launched, new responsive columns, new helpers"}</p>
+                    </div>
+                </NavbarItem>
+                <NavbarItem tag={NavbarItemTag::A} href={"#blog/".to_string()}>{"More posts"}</NavbarItem>
+                <ybc::NavbarDivider />
+                <NavbarItem>
+                    <div class="navbar-content">
+                        <div class="level is-mobile">
+                            <div class="level-left">
+                                <div class="level-item"><strong>{"Stay up to date!"}</strong></div>
+                            </div>
+                            <div class="level-right">
+                                <div class="level-item">
+                                    <a class="button is-rss is-small" href="#atom.xml">
+                                        <span class="icon is-small"><i class="fas fa-rss"></i></span>
+                                        <span>{"Subscribe"}</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </NavbarItem>
+            </ybc::NavbarDropdown>
+            <ybc::NavbarDropdown hoverable=true navlink={html!{"More"}}>
+                <NavbarItem>
+                    <div class="level is-mobile">
+                        <div class="level-left">
+                            <div class="level-item">
+                                <p><strong>{"Extensions"}</strong><br/><small>{"Side projects to enhance Bulma"}</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </NavbarItem>
+            </ybc::NavbarDropdown>
+        </>
+    };
+    let navend = html! {
+        <>
+            <NavbarItem tag={NavbarItemTag::A} href={"https://github.com/jgthms/bulma".to_string()} target={Some("_blank".to_string())}>{"Github"}</NavbarItem>
+            <NavbarItem tag={NavbarItemTag::A} href={"https://twitter.com/jgthms".to_string()} target={Some("_blank".to_string())}>{"Twitter"}</NavbarItem>
+            <NavbarItem>
+                <div class="field is-grouped">
+                    <p class="control"><a id="twitter" class="button"><span>{"Tweet"}</span></a></p>
+                    <p class="control"><a class="button is-primary" href="https://github.com/jgthms/bulma/archive/0.4.3.zip">
+                        <span class="icon"><i class="fas fa-download"></i></span>
+                        <span>{"Download"}</span>
+                    </a></p>
+                </div>
+            </NavbarItem>
+        </>
+    };
+    html! {
+        <>
+            <div id="navbar"></div>
+            <Section>
+                <Title tag="h1">{"Navbar"}</Title>
+                <hr />
+                <Navbar spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+                <br />
+                <Navbar classes="is-primary" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+                <br />
+                <Navbar classes="is-link" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+                <br />
+                <Navbar classes="is-info" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+                <br />
+                <Navbar classes="is-success" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+                <br />
+                <Navbar classes="is-warning" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+                <br />
+                <Navbar classes="is-danger" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+                <br />
+                <Navbar classes="is-white" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+                <br />
+                <Navbar classes="is-black" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+                <br />
+                <Navbar classes="is-light" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+                <br />
+                <Navbar classes="is-dark" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+                <br />
+                <Navbar classes="is-transparent" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+            </Section>
+        </>
+    }
+}
+
 #[function_component(TypographySection)]
 fn typography_section() -> Html {
     html! {
@@ -557,22 +782,135 @@ fn icon_section() -> Html {
                 <Columns>
                     <Column>
                         <Icon size={Some(ybc::Size::Small)}>
-                            <i class="fa fa-home"></i>
+                            <i class="fas fa-home fa-sm"></i>
                         </Icon>
                         {" "}
                         <Icon>
-                            <i class="fa fa-home"></i>
+                            <i class="fas fa-home"></i>
                         </Icon>
                         {" "}
                         <Icon size={Some(ybc::Size::Medium)}>
-                            <i class="fa fa-home"></i>
+                            <i class="fas fa-home fa-lg"></i>
                         </Icon>
                         {" "}
                         <Icon size={Some(ybc::Size::Large)}>
-                            <i class="fa fa-home"></i>
+                            <i class="fas fa-home fa-2x"></i>
                         </Icon>
                     </Column>
                 </Columns>
+
+                <Title tag="h2" size={HeaderSize::Is4}>{"Icon text"}</Title>
+                <Block>
+                    <span class="icon-text">
+                        <span class="icon"><i class="fas fa-home"></i></span>
+                        <span>{"Home"}</span>
+                    </span>
+                </Block>
+
+                <Block>
+                    <span class="icon-text">
+                        <span class="icon"><i class="fas fa-train"></i></span>
+                        <span>{"Paris"}</span>
+                        <span class="icon"><i class="fas fa-arrow-right"></i></span>
+                        <span>{"Budapest"}</span>
+                        <span class="icon"><i class="fas fa-arrow-right"></i></span>
+                        <span>{"Bucharest"}</span>
+                        <span class="icon"><i class="fas fa-arrow-right"></i></span>
+                        <span>{"Istanbul"}</span>
+                        <span class="icon"><i class="fas fa-flag-checkered"></i></span>
+                    </span>
+                </Block>
+
+                <Content>
+                    <p>
+                        {"An invitation to "}
+                        <span class="icon-text">
+                            <span class="icon"><i class="fas fa-utensils"></i></span>
+                            <span>{"dinner"}</span>
+                        </span>
+                        {" was soon afterwards dispatched; and already had Mrs. Bennet planned the courses that were to do credit to her housekeeping, when an answer arrived which deferred it all. Mr. Bingley was obliged to be in "}
+                        <span class="icon-text">
+                            <span class="icon"><i class="fas fa-city"></i></span>
+                            <span>{"town"}</span>
+                        </span>
+                        {", the following day, and, consequently, unable to accept the honour of their "}
+                        <span class="icon-text">
+                            <span class="icon"><i class="fas fa-envelope-open-text"></i></span>
+                            <span>{"invitation"}</span>
+                        </span>
+                        {", etc."}
+                    </p>
+
+                    <p>
+                        {"Mrs. Bennet was quite disconcerted. She could not imagine what business he could have in "}
+                        <span class="icon-text">
+                            <span class="icon"><i class="fas fa-flag-checkered"></i></span>
+                            <span>{"arrival"}</span>
+                        </span>
+                        {" in Hertfordshire; and she began to fear that he might be always "}
+                        <span class="icon-text">
+                            <span class="icon"><i class="fas fa-plane-departure"></i></span>
+                            <span>{"flying"}</span>
+                        </span>
+                        {" about from one place to another, and never settled at Netherfield as he ought to be."}
+                    </p>
+                </Content>
+
+                <Block>
+                    <div class="icon-text">
+                        <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
+                        <span>{"Information"}</span>
+                    </div>
+                    <p class="block">{"Your package will be delivered on "}<strong>{"Tuesday at 08:00"}</strong>{"."}</p>
+
+                    <div class="icon-text">
+                        <span class="icon has-text-success"><i class="fas fa-check-square"></i></span>
+                        <span>{"Success"}</span>
+                    </div>
+                    <p class="block">{"Your image has been successfully uploaded."}</p>
+
+                    <div class="icon-text">
+                        <span class="icon has-text-warning"><i class="fas fa-exclamation-triangle"></i></span>
+                        <span>{"Warning"}</span>
+                    </div>
+                    <p class="block">{"Some information is missing from your "}<a href="#">{"profile"}</a>{" details."}</p>
+
+                    <div class="icon-text">
+                        <span class="icon has-text-danger"><i class="fas fa-ban"></i></span>
+                        <span>{"Danger"}</span>
+                    </div>
+                    <p class="block">{"There was an error in your submission. "}<a href="#">{"Please try again"}</a>{"."}</p>
+                </Block>
+
+                <Title tag="h2" size={HeaderSize::Is5}>{"Colors"}</Title>
+                <Block>
+                    <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
+                    <span class="icon has-text-success"><i class="fas fa-check-square"></i></span>
+                    <span class="icon has-text-warning"><i class="fas fa-exclamation-triangle"></i></span>
+                    <span class="icon has-text-danger"><i class="fas fa-ban"></i></span>
+                </Block>
+
+                <Block>
+                    <span class="icon-text has-text-info">
+                        <span class="icon"><i class="fas fa-info-circle"></i></span>
+                        <span>{"Info"}</span>
+                    </span>
+                    {" "}
+                    <span class="icon-text has-text-success">
+                        <span class="icon"><i class="fas fa-check-square"></i></span>
+                        <span>{"Success"}</span>
+                    </span>
+                    {" "}
+                    <span class="icon-text has-text-warning">
+                        <span class="icon"><i class="fas fa-exclamation-triangle"></i></span>
+                        <span>{"Warning"}</span>
+                    </span>
+                    {" "}
+                    <span class="icon-text has-text-danger">
+                        <span class="icon"><i class="fas fa-ban"></i></span>
+                        <span>{"Danger"}</span>
+                    </span>
+                </Block>
             </Section>
         </>
     }
@@ -625,11 +963,6 @@ fn images_section() -> Html {
                                 <img alt="" src="https://placehold.net/3.png" />
                             </Image>
                         </div>
-
-
-
-
-
 
                         <div class="cell">
                             <Image size={Some(ImageSize::Is128x128)}>
