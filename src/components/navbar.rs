@@ -80,6 +80,9 @@ impl Component for Navbar {
         // navbar classes
         let mut class = Classes::from("navbar");
         class.push(ctx.props().classes.clone());
+        if ctx.props().spaced {
+            class.push("is-spaced");
+        }
         if let Some(fixed) = &ctx.props().fixed {
             class.push(&fixed.to_string());
         }

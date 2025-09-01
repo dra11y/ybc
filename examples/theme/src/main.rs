@@ -94,9 +94,219 @@ pub fn app() -> Html {
                             <ProgressSection />
                             <TableSection />
                             <TagSection />
+                            <BreadcrumbSection />
+                            <HeroSection />
+                            <CardSection />
+                            <DropdownSection />
                         </Column>
                     </Columns>
                 </Container>
+            </Section>
+        </>
+    }
+}
+
+#[function_component(HeroSection)]
+fn hero_section() -> Html {
+    fn hero_block(classes: &'static str, navbar_classes: &'static str) -> Html {
+        html! {<>
+            <Navbar
+                classes={navbar_classes}
+                padded=true
+                spaced=true
+                navbrand={html!{
+                    <>
+                        <NavbarItem>
+                            <img src="https://bulma.io/images/bulma-type-white.png" alt="Logo" />
+                        </NavbarItem>
+                    </>
+                }}
+                navend={html!{
+                    <>
+                        <NavbarItem classes="is-active" tag={NavbarItemTag::A} href={"#".to_string()}> {"Home"} </NavbarItem>
+                        <NavbarItem tag={NavbarItemTag::A} href={"#".to_string()}> {"Examples"} </NavbarItem>
+                        <NavbarItem tag={NavbarItemTag::A} href={"#".to_string()}> {"Documentation"} </NavbarItem>
+                        <ybc::NavbarDropdown hoverable=true navlink={html!{"More"}}>
+                            <NavbarItem>
+                                <div class="level is-mobile">
+                                    <div class="level-left">
+                                        <div class="level-item">
+                                            <p>
+                                                <strong>{"Extensions"}</strong><br/>
+                                                <small>{"Side projects to enhance Bulma"}</small>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </NavbarItem>
+                        </ybc::NavbarDropdown>
+                        <NavbarItem>
+                            <Button classes="is-primary is-inverted">
+                                <span class="icon"><i class="fab fa-github"></i></span>
+                                <span>{"Download"}</span>
+                            </Button>
+                        </NavbarItem>
+                    </>
+                }}
+            />
+            <Hero classes={classes} body={html!{
+                    <div class="container has-text-centered">
+                        <Title>{"Title"}</Title>
+                        <Subtitle>{"Subtitle"}</Subtitle>
+                    </div>
+                }} foot={Some(html!{
+                    <nav class="tabs">
+                        <div class="container">
+                            <ul>
+                                <li class="is-active"><a>{"Overview"}</a></li>
+                                <li><a>{"Modifiers"}</a></li>
+                                <li><a>{"Grid"}</a></li>
+                                <li><a>{"Elements"}</a></li>
+                                <li><a>{"Components"}</a></li>
+                                <li><a>{"Layout"}</a></li>
+                            </ul>
+                        </div>
+                    </nav>
+                })} />
+                <br />
+        </>}
+    }
+
+    html! {
+        <>
+            <div id="hero"></div>
+            <Section>
+                <Title tag="h1">{"Hero"}</Title>
+                <hr />
+                {hero_block("hero", "navbar")}
+                {hero_block("hero is-primary", "navbar is-primary")}
+                {hero_block("hero is-link", "navbar is-link")}
+                {hero_block("hero is-info", "navbar is-info")}
+                {hero_block("hero is-success", "navbar is-success")}
+                {hero_block("hero is-warning", "navbar is-warning")}
+                {hero_block("hero is-danger", "navbar is-danger")}
+                {hero_block("hero is-white", "navbar is-white")}
+                {hero_block("hero is-black", "navbar is-black")}
+                {hero_block("hero is-light", "navbar is-light")}
+                {hero_block("hero is-dark", "navbar is-dark")}
+            </Section>
+        </>
+    }
+}
+#[function_component(BreadcrumbSection)]
+fn breadcrumb_section() -> Html {
+    html! {
+        <>
+            <div id="breadcrumb"></div>
+            <Section>
+                <Title tag="h1">{"Breadcrumb"}</Title>
+                <hr />
+                <ybc::Breadcrumb>
+                    <li><a>{"Bulma"}</a></li>
+                    <li><a>{"Documentation"}</a></li>
+                    <li><a>{"Components"}</a></li>
+                    <li class="is-active"><a>{"Breadcrumb"}</a></li>
+                </ybc::Breadcrumb>
+            </Section>
+        </>
+    }
+}
+
+#[function_component(CardSection)]
+fn card_section() -> Html {
+    html! {
+        <>
+            <div id="card"></div>
+            <Section>
+                <Title tag="h1">{"Cards"}</Title>
+                <hr />
+                <Columns>
+                    <Column>
+                        <ybc::Card>
+                            <ybc::CardImage>
+                                <Image classes="is-4by3">
+                                    <img alt="" src="https://picsum.photos/800/600" />
+                                </Image>
+                            </ybc::CardImage>
+                            <ybc::CardContent>
+                                <Media>
+                                    <MediaLeft>
+                                        <figure class="image" style="height: 40px; width: 40px;">
+                                            <img src="https://source.unsplash.com/random/96x96" alt="Image" />
+                                        </figure>
+                                    </MediaLeft>
+                                    <MediaContent>
+                                        <Title tag="p" size={HeaderSize::Is4}>{"John Smith"}</Title>
+                                        <Subtitle tag="p" size={HeaderSize::Is6}>{"@johnsmith"}</Subtitle>
+                                    </MediaContent>
+                                </Media>
+                                <Content>
+                                    {"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris."}
+                                    <br />
+                                    <a>{"@bulmaio"}</a>{"."}
+                                    <a>{"#css"}</a>
+                                    <a>{"#responsive"}</a>
+                                    <br />
+                                    <small>{"11:09 PM - 1 Jan 2016"}</small>
+                                </Content>
+                            </ybc::CardContent>
+                        </ybc::Card>
+                    </Column>
+                    <Column>
+                        <ybc::Card>
+                            <ybc::CardHeader>
+                                <p class="card-header-title">{"Component"}</p>
+                                <a class="card-header-icon">
+                                    <span class="icon"><i class="fa fa-angle-down"></i></span>
+                                </a>
+                            </ybc::CardHeader>
+                            <ybc::CardContent>
+                                <Content>
+                                    {"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris."}
+                                    <br />
+                                    <a>{"@bulmaio"}</a>{"."}
+                                    <a>{"#css"}</a>
+                                    <a>{"#responsive"}</a>
+                                    <br />
+                                    <small>{"11:09 PM - 1 Jan 2016"}</small>
+                                </Content>
+                            </ybc::CardContent>
+                            <ybc::CardFooter>
+                                <a class="card-footer-item">{"Save"}</a>
+                                <a class="card-footer-item">{"Edit"}</a>
+                                <a class="card-footer-item">{"Delete"}</a>
+                            </ybc::CardFooter>
+                        </ybc::Card>
+                    </Column>
+                </Columns>
+            </Section>
+        </>
+    }
+}
+
+#[function_component(DropdownSection)]
+fn dropdown_section() -> Html {
+    html! {
+        <>
+            <div id="dropdown"></div>
+            <Section>
+                <Title tag="h1">{"Dropdown"}</Title>
+                <hr />
+                <ybc::Dropdown hoverable=true button_html={html!{<span>{"Hover me"}</span>}}>
+                    <a class="dropdown-item">{"Overview"}</a>
+                    <a class="dropdown-item">{"Elements"}</a>
+                    <a class="dropdown-item">{"Components"}</a>
+                    <hr class="dropdown-divider" />
+                    <a class="dropdown-item">{"Layout"}</a>
+                </ybc::Dropdown>
+                {" "}
+                <ybc::Dropdown button_html={html!{<span>{"Click me"}</span>}}>
+                    <a class="dropdown-item">{"Overview"}</a>
+                    <a class="dropdown-item">{"Elements"}</a>
+                    <a class="dropdown-item">{"Components"}</a>
+                    <hr class="dropdown-divider" />
+                    <a class="dropdown-item">{"Layout"}</a>
+                </ybc::Dropdown>
             </Section>
         </>
     }
