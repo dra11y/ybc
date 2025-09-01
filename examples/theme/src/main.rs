@@ -103,7 +103,9 @@ pub fn app() -> Html {
                             <MessageSection />
                             <ModalSection />
                             <NavbarSection />
+                            <PaginationSection />
                             <PanelSection />
+                            <TabsSection />
                         </Column>
                     </Columns>
                 </Container>
@@ -731,6 +733,49 @@ fn navbar_section() -> Html {
     }
 }
 
+#[function_component(PaginationSection)]
+fn pagination_section() -> Html {
+    html! {
+        <>
+            <div id="pagination"></div>
+            <Section>
+                <Title tag="h1">{"Pagination"}</Title>
+                <hr />
+                <ybc::Pagination
+                    previous={html!{<ybc::PaginationItem item_type={ybc::PaginationItemType::Previous}>{"Previous"}</ybc::PaginationItem>}}
+                    next={html!{<ybc::PaginationItem item_type={ybc::PaginationItemType::Next}>{"Next page"}</ybc::PaginationItem>}}
+                >
+                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"1"}</ybc::PaginationItem></li>
+                    <li><ybc::PaginationEllipsis /></li>
+                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"45"}</ybc::PaginationItem></li>
+                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"46"}</ybc::PaginationItem></li>
+                    <li><a class="pagination-link is-current" aria-label="Page 47" aria-current="page">{"47"}</a></li>
+                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"48"}</ybc::PaginationItem></li>
+                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"49"}</ybc::PaginationItem></li>
+                    <li><ybc::PaginationEllipsis /></li>
+                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"86"}</ybc::PaginationItem></li>
+                </ybc::Pagination>
+                <br />
+                <ybc::Pagination
+                    rounded=true
+                    previous={html!{<ybc::PaginationItem item_type={ybc::PaginationItemType::Previous}>{"Previous"}</ybc::PaginationItem>}}
+                    next={html!{<ybc::PaginationItem item_type={ybc::PaginationItemType::Next}>{"Next page"}</ybc::PaginationItem>}}
+                >
+                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"1"}</ybc::PaginationItem></li>
+                    <li><ybc::PaginationEllipsis /></li>
+                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"45"}</ybc::PaginationItem></li>
+                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"46"}</ybc::PaginationItem></li>
+                    <li><a class="pagination-link is-current" aria-label="Page 47" aria-current="page">{"47"}</a></li>
+                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"48"}</ybc::PaginationItem></li>
+                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"49"}</ybc::PaginationItem></li>
+                    <li><ybc::PaginationEllipsis /></li>
+                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"86"}</ybc::PaginationItem></li>
+                </ybc::Pagination>
+            </Section>
+        </>
+    }
+}
+
 #[function_component(PanelSection)]
 fn panel_section() -> Html {
     let active = use_state(|| "all".to_string());
@@ -811,6 +856,126 @@ fn panel_section() -> Html {
                         <Button classes="is-link is-outlined is-fullwidth">{"Reset all filters"}</Button>
                     </ybc::PanelBlock>
                 </ybc::Panel>
+            </Section>
+        </>
+    }
+}
+
+#[function_component(TabsSection)]
+fn tabs_section() -> Html {
+    let active_tab = use_state(|| "pictures".to_string());
+
+    let set_tab = |tab: &str| {
+        let tab = tab.to_string();
+        let active_tab = active_tab.clone();
+        Callback::from(move |_| active_tab.set(tab.clone()))
+    };
+
+    let tab_content = |name: &str, icon: &str, label: &str| {
+        let is_active = *active_tab == name;
+        html! {
+            <li class={classes!(is_active.then_some("is-active"))}>
+                <a onclick={set_tab(name)}>
+                    <span class="icon is-small"><i class={format!("fas fa-{}", icon)} aria-hidden="true"></i></span>
+                    <span>{label}</span>
+                </a>
+            </li>
+        }
+    };
+
+    html! {
+        <>
+            <div id="tabs"></div>
+            <Section>
+                <Title tag="h1">{"Tabs"}</Title>
+                <hr />
+
+                <ybc::Tabs>
+                    {tab_content("pictures", "image", "Pictures")}
+                    {tab_content("music", "music", "Music")}
+                    {tab_content("videos", "film", "Videos")}
+                    {tab_content("documents", "file-text-o", "Documents")}
+                </ybc::Tabs>
+                <br />
+
+                <ybc::Tabs alignment={Some(ybc::Alignment::Centered)}>
+                    {tab_content("pictures", "image", "Pictures")}
+                    {tab_content("music", "music", "Music")}
+                    {tab_content("videos", "film", "Videos")}
+                    {tab_content("documents", "file-text-o", "Documents")}
+                </ybc::Tabs>
+                <br />
+
+                <ybc::Tabs size={Some(ybc::Size::Small)}>
+                    {tab_content("pictures", "image", "Pictures")}
+                    {tab_content("music", "music", "Music")}
+                    {tab_content("videos", "film", "Videos")}
+                    {tab_content("documents", "file-text-o", "Documents")}
+                </ybc::Tabs>
+                <br />
+
+                <ybc::Tabs size={Some(ybc::Size::Medium)}>
+                    {tab_content("pictures", "image", "Pictures")}
+                    {tab_content("music", "music", "Music")}
+                    {tab_content("videos", "film", "Videos")}
+                    {tab_content("documents", "file-text-o", "Documents")}
+                </ybc::Tabs>
+                <br />
+
+                <ybc::Tabs size={Some(ybc::Size::Large)}>
+                    {tab_content("pictures", "image", "Pictures")}
+                    {tab_content("music", "music", "Music")}
+                    {tab_content("videos", "film", "Videos")}
+                    {tab_content("documents", "file-text-o", "Documents")}
+                </ybc::Tabs>
+                <br />
+
+                <ybc::Tabs boxed=true>
+                    {tab_content("pictures", "image", "Pictures")}
+                    {tab_content("music", "music", "Music")}
+                    {tab_content("videos", "film", "Videos")}
+                    {tab_content("documents", "file-text-o", "Documents")}
+                </ybc::Tabs>
+                <br />
+
+                <ybc::Tabs toggle=true>
+                    {tab_content("pictures", "image", "Pictures")}
+                    {tab_content("music", "music", "Music")}
+                    {tab_content("videos", "film", "Videos")}
+                    {tab_content("documents", "file-text-o", "Documents")}
+                </ybc::Tabs>
+                <br />
+
+                <ybc::Tabs toggle=true rounded=true>
+                    {tab_content("pictures", "image", "Pictures")}
+                    {tab_content("music", "music", "Music")}
+                    {tab_content("videos", "film", "Videos")}
+                    {tab_content("documents", "file-text-o", "Documents")}
+                </ybc::Tabs>
+                <br />
+
+                <ybc::Tabs fullwidth=true>
+                    {tab_content("pictures", "image", "Pictures")}
+                    {tab_content("music", "music", "Music")}
+                    {tab_content("videos", "film", "Videos")}
+                    {tab_content("documents", "file-text-o", "Documents")}
+                </ybc::Tabs>
+                <br />
+
+                <ybc::Tabs alignment={Some(ybc::Alignment::Centered)} boxed=true>
+                    {tab_content("pictures", "image", "Pictures")}
+                    {tab_content("music", "music", "Music")}
+                    {tab_content("videos", "film", "Videos")}
+                    {tab_content("documents", "file-text-o", "Documents")}
+                </ybc::Tabs>
+                <br />
+
+                <ybc::Tabs toggle=true fullwidth=true size={Some(ybc::Size::Large)}>
+                    {tab_content("pictures", "image", "Pictures")}
+                    {tab_content("music", "music", "Music")}
+                    {tab_content("videos", "film", "Videos")}
+                    {tab_content("documents", "file-text-o", "Documents")}
+                </ybc::Tabs>
             </Section>
         </>
     }
