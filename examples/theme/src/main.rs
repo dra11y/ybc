@@ -98,6 +98,8 @@ pub fn app() -> Html {
                             <HeroSection />
                             <CardSection />
                             <DropdownSection />
+                            <MediaSection />
+                            <MenuSection />
                         </Column>
                     </Columns>
                 </Container>
@@ -286,27 +288,218 @@ fn card_section() -> Html {
 
 #[function_component(DropdownSection)]
 fn dropdown_section() -> Html {
+    let open1 = use_state(|| false);
+    let open2 = use_state(|| false);
     html! {
         <>
             <div id="dropdown"></div>
             <Section>
                 <Title tag="h1">{"Dropdown"}</Title>
                 <hr />
-                <ybc::Dropdown hoverable=true button_html={html!{<span>{"Hover me"}</span>}}>
-                    <a class="dropdown-item">{"Overview"}</a>
-                    <a class="dropdown-item">{"Elements"}</a>
-                    <a class="dropdown-item">{"Components"}</a>
-                    <hr class="dropdown-divider" />
-                    <a class="dropdown-item">{"Layout"}</a>
-                </ybc::Dropdown>
-                {" "}
-                <ybc::Dropdown button_html={html!{<span>{"Click me"}</span>}}>
-                    <a class="dropdown-item">{"Overview"}</a>
-                    <a class="dropdown-item">{"Elements"}</a>
-                    <a class="dropdown-item">{"Components"}</a>
-                    <hr class="dropdown-divider" />
-                    <a class="dropdown-item">{"Layout"}</a>
-                </ybc::Dropdown>
+                <Columns>
+                    <Column>
+                        <ybc::Dropdown active={*open1} on_active_change={{let open1 = open1.clone(); Callback::from(move |v| open1.set(v))}} button_html={html!{
+                            <>
+                                <span>{"Dropdown button"}</span>
+                                <span class="icon is-small"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                            </>
+                        }}>
+                            <a href="#" class="dropdown-item">{"Dropdown item"}</a>
+                            <a class="dropdown-item">{"Other dropdown item"}</a>
+                            <a href="#" class="dropdown-item is-active">{"Active dropdown item"}</a>
+                            <a href="#" class="dropdown-item">{"Other dropdown item"}</a>
+                            <hr class="dropdown-divider" />
+                            <a href="#" class="dropdown-item">{"With a divider"}</a>
+                        </ybc::Dropdown>
+                    </Column>
+                    <Column>
+                        <ybc::Dropdown active={*open2} on_active_change={{let open2 = open2.clone(); Callback::from(move |v| open2.set(v))}} button_classes="is-info" button_html={html!{
+                            <>
+                                <span>{"Content"}</span>
+                                <span class="icon is-small"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                            </>
+                        }}>
+                            <div class="dropdown-item">
+                                <p>{"You can insert "}<strong>{"any type of content"}</strong>{" within the dropdown menu."}</p>
+                            </div>
+                            <hr class="dropdown-divider" />
+                            <div class="dropdown-item">
+                                <p>{"You simply need to use a "}<code>{"<div>"}</code>{" instead."}</p>
+                            </div>
+                            <hr class="dropdown-divider" />
+                            <a href="#" class="dropdown-item">{"This is a link"}</a>
+                        </ybc::Dropdown>
+                    </Column>
+                </Columns>
+            </Section>
+        </>
+    }
+}
+
+#[function_component(MediaSection)]
+fn media_section() -> Html {
+    html! {
+        <>
+            <div id="media"></div>
+            <Section>
+                <Title tag="h1">{"Media Object"}</Title>
+                <hr />
+                <Media>
+                    <MediaLeft>
+                        <Image size={Some(ImageSize::Is64x64)}>
+                            <img alt="Image" src="https://placehold.net/avatar-2.svg" />
+                        </Image>
+                    </MediaLeft>
+                    <MediaContent>
+                        <Content>
+                            <p>
+                                <strong>{"John Smith"}</strong>{" "}
+                                <small>{"@johnsmith"}</small>{" "}
+                                <small>{"31m"}</small>
+                                <br/>
+                                {"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis."}
+                            </p>
+                        </Content>
+                        <Level>
+                            <LevelLeft>
+                                <a class="level-item"><span class="icon is-small"><i class="fa fa-reply"></i></span></a>
+                                <a class="level-item"><span class="icon is-small"><i class="fa fa-retweet"></i></span></a>
+                                <a class="level-item"><span class="icon is-small"><i class="fa fa-heart"></i></span></a>
+                            </LevelLeft>
+                        </Level>
+                    </MediaContent>
+                    <ybc::MediaRight>
+                        <YDelete />
+                    </ybc::MediaRight>
+                </Media>
+                <hr />
+                <Media>
+                    <MediaLeft>
+                        <Image size={Some(ImageSize::Is64x64)}>
+                            <img alt="Image" src="https://placehold.net/avatar-5.svg" />
+                        </Image>
+                    </MediaLeft>
+                    <MediaContent>
+                        <div class="field">
+                            <p class="control">
+                                <textarea class="textarea" placeholder="Add a comment..."></textarea>
+                            </p>
+                        </div>
+                        <Level>
+                            <LevelLeft>
+                                <div class="level-item">
+                                    <a class="button is-info">{"Post comment"}</a>
+                                </div>
+                            </LevelLeft>
+                            <ybc::LevelRight>
+                                <div class="level-item">
+                                    <label class="checkbox"><input type="checkbox" /> {" Press enter to submit"}</label>
+                                </div>
+                            </ybc::LevelRight>
+                        </Level>
+                    </MediaContent>
+                </Media>
+                <hr />
+                <Subtitle tag="h4">{"Nesting"}</Subtitle>
+                <Media>
+                    <MediaLeft>
+                        <Image size={Some(ImageSize::Is64x64)}>
+                            <img alt="Image" src="https://placehold.net/avatar-3.svg" />
+                        </Image>
+                    </MediaLeft>
+                    <MediaContent>
+                        <Content>
+                            <p>
+                                <strong>{"Barbara Middleton"}</strong>
+                                <br/>
+                                {"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris sit amet dolor blandit rutrum. Nunc in tempus turpis."}
+                                <br/>
+                                <small><a>{"Like"}</a>{" · "}<a>{"Reply"}</a>{" · 3 hrs"}</small>
+                            </p>
+                        </Content>
+                        <Media>
+                            <MediaLeft>
+                                <Image size={Some(ImageSize::Is64x64)}>
+                                    <img alt="Image" src="https://placehold.net/avatar-4.svg" />
+                                </Image>
+                            </MediaLeft>
+                            <MediaContent>
+                                <Content>
+                                    <p>
+                                        <strong>{"Sean Brown"}</strong>
+                                        <br/>
+                                        {"Donec sollicitudin urna eget eros malesuada sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam blandit nisl a nulla sagittis, a lobortis leo feugiat."}
+                                        <br/>
+                                        <small><a>{"Like"}</a>{" · "}<a>{"Reply"}</a>{" · 2 hrs"}</small>
+                                    </p>
+                                </Content>
+                                <Media>{"Vivamus quis semper metus, non tincidunt dolor. Vivamus in mi eu lorem cursus ullamcorper sit amet nec massa."}</Media>
+                                <Media>{"Morbi vitae diam et purus tincidunt porttitor vel vitae augue. Praesent malesuada metus sed pharetra euismod. Cras tellus odio, tincidunt iaculis diam non, porta aliquet tortor."}</Media>
+                            </MediaContent>
+                        </Media>
+                        <Media>
+                            <MediaLeft>
+                                <Image size={Some(ImageSize::Is64x64)}>
+                                    <img alt="Image" src="https://placehold.net/avatar-1.svg" />
+                                </Image>
+                            </MediaLeft>
+                            <MediaContent>
+                                <Content>
+                                    <p>
+                                        <strong>{"Kayli Eunice "}</strong>
+                                        <br/>
+                                        {"Sed convallis scelerisque mauris, non pulvinar nunc mattis vel. Maecenas varius felis sit amet magna vestibulum euismod malesuada cursus libero. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus lacinia non nisl id feugiat."}
+                                        <br/>
+                                        <small><a>{"Like"}</a>{" · "}<a>{"Reply"}</a>{" · 2 hrs"}</small>
+                                    </p>
+                                </Content>
+                            </MediaContent>
+                        </Media>
+                    </MediaContent>
+                </Media>
+            </Section>
+        </>
+    }
+}
+
+#[function_component(MenuSection)]
+fn menu_section() -> Html {
+    html! {
+        <>
+            <div id="menu"></div>
+            <Section>
+                <Title tag="h1">{"Menu"}</Title>
+                <hr />
+                <div class="column is-3">
+                    <ybc::Menu>
+                        <ybc::MenuLabel text="General" />
+                        <ybc::MenuList>
+                            <li><a>{"Dashboard"}</a></li>
+                            <li><a>{"Customers"}</a></li>
+                        </ybc::MenuList>
+                        <ybc::MenuLabel text="Administration" />
+                        <ybc::MenuList>
+                            <li><a>{"Team Settings"}</a></li>
+                            <li>
+                                <a class="is-active">{"Manage Your Team"}</a>
+                                <ul>
+                                    <li><a>{"Members"}</a></li>
+                                    <li><a>{"Plugins"}</a></li>
+                                    <li><a>{"Add a member"}</a></li>
+                                </ul>
+                            </li>
+                            <li><a>{"Invitations"}</a></li>
+                            <li><a>{"Cloud Storage Environment Settings"}</a></li>
+                            <li><a>{"Authentication"}</a></li>
+                        </ybc::MenuList>
+                        <ybc::MenuLabel text="Transactions" />
+                        <ybc::MenuList>
+                            <li><a>{"Payments"}</a></li>
+                            <li><a>{"Transfers"}</a></li>
+                            <li><a>{"Balance"}</a></li>
+                        </ybc::MenuList>
+                    </ybc::Menu>
+                </div>
             </Section>
         </>
     }
@@ -760,6 +953,8 @@ fn table_section() -> Html {
                     </tbody>
                 </Table>
                 <br />
+                <Columns>
+                <Column>
                 <Table striped=true>
                     <thead><tr><th>{"One"}</th><th>{"Two"}</th></tr></thead>
                     <tbody>
@@ -770,12 +965,14 @@ fn table_section() -> Html {
                         <tr><td>{"Eleven"}</td><td>{"Twelve"}</td></tr>
                     </tbody>
                 </Table>
-                <br />
+                </Column>
+                <Column>
                 <Table bordered=true>
                     <thead><tr><th>{"One"}</th><th>{"Two"}</th></tr></thead>
                     <tbody><tr><td>{"Three"}</td><td>{"Four"}</td></tr></tbody>
                 </Table>
-                <br />
+                </Column>
+                <Column>
                 <Table narrow=true>
                     <thead><tr><th>{"One"}</th><th>{"Two"}</th></tr></thead>
                     <tbody>
@@ -786,7 +983,8 @@ fn table_section() -> Html {
                         <tr><td>{"Eleven"}</td><td>{"Twelve"}</td></tr>
                     </tbody>
                 </Table>
-                <br />
+                </Column>
+                <Column>
                 <Table bordered=true striped=true narrow=true>
                     <thead><tr><th>{"One"}</th><th>{"Two"}</th></tr></thead>
                     <tbody>
@@ -797,6 +995,8 @@ fn table_section() -> Html {
                         <tr><td>{"Eleven"}</td><td>{"Twelve"}</td></tr>
                     </tbody>
                 </Table>
+                </Column>
+                </Columns>
             </Section>
         </>
     }

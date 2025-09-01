@@ -301,7 +301,7 @@ pub struct NavbarDropdownProps {
 ///
 /// [https://bulma.io/documentation/components/navbar/#dropdown-menu](https://bulma.io/documentation/components/navbar/#dropdown-menu)
 pub struct NavbarDropdown {
-    is_menu_active: bool,
+    is_active: bool,
 }
 
 impl Component for NavbarDropdown {
@@ -309,7 +309,7 @@ impl Component for NavbarDropdown {
     type Properties = NavbarDropdownProps;
 
     fn create(_ctx: &Context<Self>) -> Self {
-        Self { is_menu_active: false }
+        Self { is_active: false }
     }
 
     fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
@@ -317,8 +317,8 @@ impl Component for NavbarDropdown {
             return false;
         }
         match msg {
-            DropdownMsg::Open => self.is_menu_active = true,
-            DropdownMsg::Close => self.is_menu_active = false,
+            DropdownMsg::Open => self.is_active = true,
+            DropdownMsg::Close => self.is_active = false,
         }
         true
     }
@@ -352,7 +352,7 @@ impl Component for NavbarDropdown {
         } else {
             ctx.link().callback(|_| DropdownMsg::Open)
         };
-        let overlay = if self.is_menu_active {
+        let overlay = if self.is_active {
             class.push("is-active");
             html! {<div onclick={ctx.link().callback(|_| DropdownMsg::Close)} style="z-index:10;background-color:rgba(0,0,0,0);position:fixed;top:0;bottom:0;left:0;right:0;"></div>}
         } else {
