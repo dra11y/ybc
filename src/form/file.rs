@@ -59,18 +59,27 @@ pub fn file(props: &FileProps) -> Html {
     let class = classes!(
         "file",
         props.classes.clone(),
-        props.has_name.is_some().then_some("has-name"),
+        // Show the name container when a placeholder is provided or files are selected
+        (props.has_name.is_some() || !props.files.is_empty()).then_some("has-name"),
         props.right.then_some("is-right"),
         props.fullwidth.then_some("is-fullwidth"),
         props.boxed.then_some("is-boxed"),
         props.size.as_ref().map(|size| size.to_string()),
         props.alignment.as_ref().map(|alignment| alignment.to_string()),
     );
-    let filenames = props
-        .files
-        .iter()
-        .map(|file| html! {<span class="file-name">{file.name()}</span>})
-        .collect::<Vec<_>>();
+
+    let filenames = if props.files.is_empty() {
+        match &props.has_name {
+            Some(placeholder) => vec![html! {<span class="file-name">{placeholder.clone()}</span>}],
+            None => Vec::new(),
+        }
+    } else {
+        props
+            .files
+            .iter()
+            .map(|file| html! {<span class="file-name">{file.name()}</span>})
+            .collect::<Vec<_>>()
+    };
     let onchange = props.update.reform(|ev: web_sys::Event| {
         let input: HtmlInputElement = ev.target_dyn_into().expect_throw("event target should be an input");
         let list = input.files().expect_throw("input should have a file list");

@@ -22,12 +22,6 @@ pub struct FieldProps {
     /// A convenience bool to add the `is-danger` class to the help classes when `true`.
     #[prop_or_default]
     pub help_has_error: bool,
-    /// Has icons on the left of the field's controls.
-    #[prop_or_default]
-    pub icons_left: bool,
-    /// Has icons on the right of the field's controls.
-    #[prop_or_default]
-    pub icons_right: bool,
     /// Allow addons to the field's controls.
     #[prop_or_default]
     pub addons: bool,
@@ -54,8 +48,6 @@ pub fn field(props: &FieldProps) -> Html {
     let class = classes!(
         "field",
         props.classes.clone(),
-        props.icons_left.then_some("has-icons-left"),
-        props.icons_right.then_some("has-icons-right"),
         props.addons.then_some("has-addons"),
         props.grouped.then_some("is-grouped"),
         props.multiline.then_some("is-multiline"),

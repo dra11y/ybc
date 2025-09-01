@@ -12,7 +12,7 @@ Goal: Rebuild `examples/theme/template.html` using only ybc components so the pa
 ## Section order (mirrors template)
 0. Shell: Container + Columns + Sidebar Menu
 1. Header: Navbar (primary) + Hero
-2. Elements: Typography, Box, Button, Content, Delete, Icon, Images, Notifications, Progress, Table, Tag
+2. Elements: Typography, Box, Button, Content, Delete, Form (see #3), Icon, Images, Notifications, Progress, Table, Tag
 3. Forms: Input, Select, Textarea, Checkbox, Radio, File, Field/Control, Addons, Horizontal
 4. Components: Breadcrumb, Card, Dropdown, Level, Media, Menu, Message, Modal, Pagination, Panel, Tabs
 5. Variants: Hero color variants, Navbar color variants, Footer

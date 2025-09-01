@@ -1,12 +1,6 @@
-@use "../bulma/helpers/flexbox" as *;
-@use "../bulma/utilities/functions" as *;
-
-// Path to Bulma's sass folder
 @use "../bulma" with (
     $family-primary: '"Nunito", sans-serif',
     $primary: rgb(55, 90, 127),
-    // $control-border-width: 2px,
-    // $input-shadow: none
 );
 
-@import url("https://fonts.googleapis.com/css?family=Nunito:400,700")
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,700");
