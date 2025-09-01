@@ -2,6 +2,16 @@ use yew::prelude::*;
 
 use crate::{Alignment, Size};
 
+#[derive(Clone, Debug, PartialEq)]
+pub struct Tab {
+    /// Stable identifier for the tab (used for comparisons/keys).
+    pub id: AttrValue,
+    /// Visible label.
+    pub label: AttrValue,
+    /// Optional icon class for an <i> element inside the tab label, e.g. "fas fa-image".
+    pub icon_class: Option<AttrValue>,
+}
+
 #[derive(Clone, Debug, Properties, PartialEq)]
 pub struct TabsProps {
     #[prop_or_default]
@@ -26,6 +36,16 @@ pub struct TabsProps {
     /// Make this component fullwidth.
     #[prop_or_default]
     pub fullwidth: bool,
+    /// Optional: Have Tabs render and manage its own clickable tabs.
+    /// When provided, `Tabs` will handle selection state internally.
+    #[prop_or_default]
+    pub tabs: Option<Vec<Tab>>,
+    /// Optional initial selected tab index when using `items`.
+    #[prop_or_default]
+    pub initial: Option<usize>,
+    /// Optional selection callback invoked with the selected index when using `items`.
+    #[prop_or_default]
+    pub onselect: Option<Callback<usize>>,
 }
 
 /// Simple responsive horizontal navigation tabs, with different styles.
@@ -46,11 +66,45 @@ pub fn tabs(props: &TabsProps) -> Html {
         props.rounded.then_some("is-rounded"),
         props.fullwidth.then_some("is-fullwidth"),
     );
-    html! {
-        <div {class}>
-            <ul>
-                {props.children.clone()}
-            </ul>
-        </div>
+    // Self-managed selection state (always created to satisfy hook rules)
+    let items_len = props.tabs.as_ref().map(|v| v.len()).unwrap_or(0);
+    let initial = props.initial.unwrap_or(0).min(items_len.saturating_sub(1));
+    let selected = use_state(|| initial);
+
+    if let Some(items) = &props.tabs {
+        let onselect = props.onselect.clone();
+
+        html! {
+            <div {class}>
+                <ul>
+                    { for items.iter().enumerate().map(|(idx, item)| {
+                        let is_active = *selected == idx;
+                        let selected_setter = selected.clone();
+                        let onselect = onselect.clone();
+                        let onclick = Callback::from(move |_| {
+                            selected_setter.set(idx);
+                            if let Some(cb) = onselect.clone() { cb.emit(idx); }
+                        });
+                        html!{
+                            <li class={classes!(is_active.then_some("is-active"))} key={item.id.to_string()}>
+                                <a {onclick}>
+                                    { if let Some(icon) = &item.icon_class { html!{<span class="icon is-small"><i class={icon.clone()} aria-hidden="true"></i></span>} } else { html!{} } }
+                                    <span>{ item.label.clone() }</span>
+                                </a>
+                            </li>
+                        }
+                    }) }
+                </ul>
+            </div>
+        }
+    } else {
+        // Backwards-compatible, uncontrolled variant
+        html! {
+            <div {class}>
+                <ul>
+                    {props.children.clone()}
+                </ul>
+            </div>
+        }
     }
 }

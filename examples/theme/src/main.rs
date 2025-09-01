@@ -863,119 +863,39 @@ fn panel_section() -> Html {
 
 #[function_component(TabsSection)]
 fn tabs_section() -> Html {
-    let active_tab = use_state(|| "pictures".to_string());
-
-    let set_tab = |tab: &str| {
-        let tab = tab.to_string();
-        let active_tab = active_tab.clone();
-        Callback::from(move |_| active_tab.set(tab.clone()))
-    };
-
-    let tab_content = |name: &str, icon: &str, label: &str| {
-        let is_active = *active_tab == name;
-        html! {
-            <li class={classes!(is_active.then_some("is-active"))}>
-                <a onclick={set_tab(name)}>
-                    <span class="icon is-small"><i class={format!("fas fa-{}", icon)} aria-hidden="true"></i></span>
-                    <span>{label}</span>
-                </a>
-            </li>
-        }
-    };
-
+    let tabs_vec = vec![
+        ybc::Tab { id: "pictures".into(), label: "Pictures".into(), icon_class: Some("fas fa-image".into()) },
+        ybc::Tab { id: "music".into(), label: "Music".into(), icon_class: Some("fas fa-music".into()) },
+        ybc::Tab { id: "videos".into(), label: "Videos".into(), icon_class: Some("fas fa-film".into()) },
+        ybc::Tab { id: "documents".into(), label: "Documents".into(), icon_class: Some("far fa-file-alt".into()) },
+    ];
     html! {
         <>
             <div id="tabs"></div>
             <Section>
                 <Title tag="h1">{"Tabs"}</Title>
                 <hr />
-
-                <ybc::Tabs>
-                    {tab_content("pictures", "image", "Pictures")}
-                    {tab_content("music", "music", "Music")}
-                    {tab_content("videos", "film", "Videos")}
-                    {tab_content("documents", "file-text-o", "Documents")}
-                </ybc::Tabs>
+                <ybc::Tabs tabs={tabs_vec.clone()} />
                 <br />
-
-                <ybc::Tabs alignment={Some(ybc::Alignment::Centered)}>
-                    {tab_content("pictures", "image", "Pictures")}
-                    {tab_content("music", "music", "Music")}
-                    {tab_content("videos", "film", "Videos")}
-                    {tab_content("documents", "file-text-o", "Documents")}
-                </ybc::Tabs>
+                <ybc::Tabs alignment={Some(ybc::Alignment::Centered)} tabs={tabs_vec.clone()} />
                 <br />
-
-                <ybc::Tabs size={Some(ybc::Size::Small)}>
-                    {tab_content("pictures", "image", "Pictures")}
-                    {tab_content("music", "music", "Music")}
-                    {tab_content("videos", "film", "Videos")}
-                    {tab_content("documents", "file-text-o", "Documents")}
-                </ybc::Tabs>
+                <ybc::Tabs size={Some(ybc::Size::Small)} tabs={tabs_vec.clone()} />
                 <br />
-
-                <ybc::Tabs size={Some(ybc::Size::Medium)}>
-                    {tab_content("pictures", "image", "Pictures")}
-                    {tab_content("music", "music", "Music")}
-                    {tab_content("videos", "film", "Videos")}
-                    {tab_content("documents", "file-text-o", "Documents")}
-                </ybc::Tabs>
+                <ybc::Tabs size={Some(ybc::Size::Medium)} tabs={tabs_vec.clone()} />
                 <br />
-
-                <ybc::Tabs size={Some(ybc::Size::Large)}>
-                    {tab_content("pictures", "image", "Pictures")}
-                    {tab_content("music", "music", "Music")}
-                    {tab_content("videos", "film", "Videos")}
-                    {tab_content("documents", "file-text-o", "Documents")}
-                </ybc::Tabs>
+                <ybc::Tabs size={Some(ybc::Size::Large)} tabs={tabs_vec.clone()} />
                 <br />
-
-                <ybc::Tabs boxed=true>
-                    {tab_content("pictures", "image", "Pictures")}
-                    {tab_content("music", "music", "Music")}
-                    {tab_content("videos", "film", "Videos")}
-                    {tab_content("documents", "file-text-o", "Documents")}
-                </ybc::Tabs>
+                <ybc::Tabs boxed=true tabs={tabs_vec.clone()} />
                 <br />
-
-                <ybc::Tabs toggle=true>
-                    {tab_content("pictures", "image", "Pictures")}
-                    {tab_content("music", "music", "Music")}
-                    {tab_content("videos", "film", "Videos")}
-                    {tab_content("documents", "file-text-o", "Documents")}
-                </ybc::Tabs>
+                <ybc::Tabs toggle=true tabs={tabs_vec.clone()} />
                 <br />
-
-                <ybc::Tabs toggle=true rounded=true>
-                    {tab_content("pictures", "image", "Pictures")}
-                    {tab_content("music", "music", "Music")}
-                    {tab_content("videos", "film", "Videos")}
-                    {tab_content("documents", "file-text-o", "Documents")}
-                </ybc::Tabs>
+                <ybc::Tabs toggle=true rounded=true tabs={tabs_vec.clone()} />
                 <br />
-
-                <ybc::Tabs fullwidth=true>
-                    {tab_content("pictures", "image", "Pictures")}
-                    {tab_content("music", "music", "Music")}
-                    {tab_content("videos", "film", "Videos")}
-                    {tab_content("documents", "file-text-o", "Documents")}
-                </ybc::Tabs>
+                <ybc::Tabs fullwidth=true tabs={tabs_vec.clone()} />
                 <br />
-
-                <ybc::Tabs alignment={Some(ybc::Alignment::Centered)} boxed=true>
-                    {tab_content("pictures", "image", "Pictures")}
-                    {tab_content("music", "music", "Music")}
-                    {tab_content("videos", "film", "Videos")}
-                    {tab_content("documents", "file-text-o", "Documents")}
-                </ybc::Tabs>
+                <ybc::Tabs alignment={Some(ybc::Alignment::Centered)} boxed=true tabs={tabs_vec.clone()} />
                 <br />
-
-                <ybc::Tabs toggle=true fullwidth=true size={Some(ybc::Size::Large)}>
-                    {tab_content("pictures", "image", "Pictures")}
-                    {tab_content("music", "music", "Music")}
-                    {tab_content("videos", "film", "Videos")}
-                    {tab_content("documents", "file-text-o", "Documents")}
-                </ybc::Tabs>
+                <ybc::Tabs toggle=true fullwidth=true size={Some(ybc::Size::Large)} tabs={tabs_vec.clone()} />
             </Section>
         </>
     }
