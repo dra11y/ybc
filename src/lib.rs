@@ -39,7 +39,7 @@ pub use components::card::{
     Card, CardContent, CardContentProps, CardFooter, CardFooterProps, CardHeader, CardHeaderProps, CardImage, CardImageProps, CardProps,
 };
 pub use components::dropdown::{Dropdown, DropdownMsg, DropdownProps};
-pub use components::menu::{Menu, MenuLabel, MenuLabelProps, MenuList, MenuListProps, MenuProps};
+pub use components::menu::{Menu, MenuItem, MenuLabel, MenuLabelProps, MenuList, MenuListProps, MenuProps};
 pub use components::message::{Message, MessageBody, MessageBodyProps, MessageHeader, MessageHeaderProps, MessageProps};
 pub use components::modal::{
     Modal, ModalCard, ModalCardProps, ModalCloseMsg, ModalContext, ModalMsg, ModalProps, ModalProvider, ModalProviderProps, UseModalHandle, use_modal,
