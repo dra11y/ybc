@@ -117,7 +117,7 @@ pub fn menu_list(props: &MenuListProps) -> Html {
             let cfg_opt = props.scroll_spy.clone();
             let uncontrolled = props.selected.is_none();
 
-            // Scroll spy: EXACT copy of Elements example
+            // Scroll spy
             {
                 let selected_id_elements = internal_selected.clone();
                 let scroll_lock = scroll_lock_effect.clone();
@@ -143,91 +143,109 @@ pub fn menu_list(props: &MenuListProps) -> Html {
                                     let ids_vec_owned = ids_vec.clone();
                                     let cfg = cfg_opt.clone().unwrap_or_default();
 
-                                    // Scroll listener: update in real time; suppress during programmatic scroll until target is reached
-                                    let cb: Closure<dyn FnMut(web_sys::Event)> = Closure::wrap(Box::new(move |_| {
-                                        let win = window();
-                                        let current = win.as_ref().and_then(|w| w.scroll_y().ok()).unwrap_or(0.0);
-                                        // Compute dynamic baseline (fixed/sticky at y=0)
-                                        let mut baseline = 0.0_f64;
-                                        if let Some(w) = win.clone() {
-                                            if let Some(doc2) = w.document() {
-                                                let inner_w = w.inner_width().ok().and_then(|v| v.as_f64()).unwrap_or(1024.0);
-                                                let list = doc2.elements_from_point((inner_w as f32) / 2.0, 0.0);
-                                                let len = list.length();
-                                                for i in 0..len {
-                                                    let js = list.get(i);
-                                                    if let Ok(elem) = js.dyn_into::<web_sys::Element>() {
-                                                        let rect = elem.get_bounding_client_rect();
-                                                        let mut include = false;
-                                                        if let Some(w) = window() {
-                                                            if let Ok(style) = w.get_computed_style(&elem) {
-                                                                if let Some(style) = style {
-                                                                    if let Ok(pos) = style.get_property_value("position") {
-                                                                        let p = pos.trim();
-                                                                        include = p == "fixed" || p == "sticky";
+                                    // Shared updater used by both initial run and scroll listener
+                                    let do_update: Rc<dyn Fn()> = {
+                                        let doc = doc.clone();
+                                        let selected_id_setter = selected_id_setter.clone();
+                                        let history = history.clone();
+                                        let ids_vec_owned = ids_vec_owned.clone();
+                                        let cfg = cfg.clone();
+                                        let scroll_lock_for_effect = scroll_lock_for_effect.clone();
+                                        let last_clicked_for_effect = last_clicked_for_effect.clone();
+                                        Rc::new(move || {
+                                            let win = window();
+                                            let current = win.as_ref().and_then(|w| w.scroll_y().ok()).unwrap_or(0.0);
+                                            // Compute dynamic baseline (fixed/sticky at y=0)
+                                            let mut baseline = 0.0_f64;
+                                            if let Some(w) = win.clone() {
+                                                if let Some(doc2) = w.document() {
+                                                    let inner_w = w.inner_width().ok().and_then(|v| v.as_f64()).unwrap_or(1024.0);
+                                                    let list = doc2.elements_from_point((inner_w as f32) / 2.0, 0.0);
+                                                    let len = list.length();
+                                                    for i in 0..len {
+                                                        let js = list.get(i);
+                                                        if let Ok(elem) = js.dyn_into::<web_sys::Element>() {
+                                                            let rect = elem.get_bounding_client_rect();
+                                                            let mut include = false;
+                                                            if let Some(w) = window() {
+                                                                if let Ok(style) = w.get_computed_style(&elem) {
+                                                                    if let Some(style) = style {
+                                                                        if let Ok(pos) = style.get_property_value("position") {
+                                                                            let p = pos.trim();
+                                                                            include = p == "fixed" || p == "sticky";
+                                                                        }
                                                                     }
                                                                 }
                                                             }
-                                                        }
-                                                        if include {
-                                                            if rect.top() <= 0.0 && rect.bottom() > 0.0 {
-                                                                baseline = baseline.max(rect.bottom());
+                                                            if include {
+                                                                if rect.top() <= 0.0 && rect.bottom() > 0.0 {
+                                                                    baseline = baseline.max(rect.bottom());
+                                                                }
                                                             }
                                                         }
                                                     }
                                                 }
                                             }
-                                        }
-                                        let threshold = current + baseline + (cfg.offset_px as f64);
-                                        // Choose last section whose absolute top <= threshold
-                                        let mut candidate: Option<(String, f64)> = None;
-                                        for id in &ids_vec_owned {
-                                            if let Some(el) = doc.get_element_by_id(id) {
-                                                let rect = el.get_bounding_client_rect();
-                                                let top = rect.top() + current;
-                                                if top <= threshold {
-                                                    match candidate {
-                                                        Some((_, best_top)) if best_top >= top => {}
-                                                        _ => candidate = Some((id.clone(), top)),
+                                            let threshold = current + baseline + (cfg.offset_px as f64);
+                                            // Choose last section whose absolute top <= threshold
+                                            let mut candidate: Option<(String, f64)> = None;
+                                            for id in &ids_vec_owned {
+                                                if let Some(el) = doc.get_element_by_id(id) {
+                                                    let rect = el.get_bounding_client_rect();
+                                                    let top = rect.top() + current;
+                                                    if top <= threshold {
+                                                        match candidate {
+                                                            Some((_, best_top)) if best_top >= top => {}
+                                                            _ => candidate = Some((id.clone(), top)),
+                                                        }
                                                     }
                                                 }
                                             }
-                                        }
-                                        let chosen_id = candidate.map(|(id, _)| id).or_else(|| ids_vec_owned.first().cloned());
-                                        if let Some(id_str) = chosen_id {
-                                            if *scroll_lock_for_effect.borrow() {
-                                                if let Some(clicked) = last_clicked_for_effect.borrow().clone() {
-                                                    if clicked == id_str {
-                                                        // Arrived at target: unlock and clear
-                                                        *scroll_lock_for_effect.borrow_mut() = false;
-                                                        last_clicked_for_effect.borrow_mut().take();
+                                            let chosen_id = candidate.map(|(id, _)| id).or_else(|| ids_vec_owned.first().cloned());
+                                            if let Some(id_str) = chosen_id {
+                                                if *scroll_lock_for_effect.borrow() {
+                                                    if let Some(clicked) = last_clicked_for_effect.borrow().clone() {
+                                                        if clicked == id_str {
+                                                            // Arrived at target: unlock and clear
+                                                            *scroll_lock_for_effect.borrow_mut() = false;
+                                                            last_clicked_for_effect.borrow_mut().take();
+                                                        } else {
+                                                            // Still scrolling to target: do not update selection yet
+                                                            return;
+                                                        }
                                                     } else {
-                                                        // Still scrolling to target: do not update selection yet
-                                                        return;
+                                                        // Defensive: if locked but no target, unlock
+                                                        *scroll_lock_for_effect.borrow_mut() = false;
                                                     }
-                                                } else {
-                                                    // Defensive: if locked but no target, unlock
-                                                    *scroll_lock_for_effect.borrow_mut() = false;
                                                 }
-                                            }
-                                            let already = selected_id_setter
-                                                .as_ref()
-                                                .as_ref()
-                                                .map(|v| v.as_str().to_string())
-                                                .unwrap_or_default();
-                                            if already != id_str {
-                                                selected_id_setter.set(Some(id_str.clone().into()));
-                                                if cfg.update_hash {
-                                                    if let Some(h) = &history {
-                                                        let _ = h.replace_state_with_url(&JsValue::NULL, "", Some(&format!("#{id_str}")));
+                                                let already = selected_id_setter
+                                                    .as_ref()
+                                                    .as_ref()
+                                                    .map(|v| v.as_str().to_string())
+                                                    .unwrap_or_default();
+                                                if already != id_str {
+                                                    selected_id_setter.set(Some(id_str.clone().into()));
+                                                    if cfg.update_hash {
+                                                        if let Some(h) = &history {
+                                                            let _ = h.replace_state_with_url(&JsValue::NULL, "", Some(&format!("#{id_str}")));
+                                                        }
                                                     }
                                                 }
                                             }
-                                        }
+                                        })
+                                    };
+
+                                    // Scroll listener: update in real time using the shared updater
+                                    let do_update_cb = do_update.clone();
+                                    let cb: Closure<dyn FnMut(web_sys::Event)> = Closure::wrap(Box::new(move |_| {
+                                        (do_update_cb.as_ref())();
                                     }));
                                     win.add_event_listener_with_callback("scroll", cb.as_ref().unchecked_ref())
                                         .ok();
                                     scroll_cb_holder.borrow_mut().replace(cb);
+
+                                    // Initial selection based on current viewport
+                                    (do_update.as_ref())();
 
                                     // User input listeners: unlock lock immediately on wheel/touch/key
                                     let unlock = {
@@ -278,6 +296,8 @@ pub fn menu_list(props: &MenuListProps) -> Html {
                                     win.add_event_listener_with_callback("keydown", on_key.as_ref().unchecked_ref())
                                         .ok();
                                     key_cb_holder.borrow_mut().replace(on_key);
+
+                                    // (Initial selection handled via do_update above)
                                 }
                             }
                         }
