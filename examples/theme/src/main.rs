@@ -2,6 +2,7 @@ mod components;
 mod elements;
 mod forms;
 mod sections;
+mod theme_picker;
 
 use std::rc::Rc;
 

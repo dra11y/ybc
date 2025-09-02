@@ -60,8 +60,8 @@ pub use components::tabs::{Tab, Tabs, TabsProps};
 pub use elements::block::{Block, BlockProps};
 pub use elements::r#box::{BBox, BBoxProps};
 pub use elements::button::{
-    Button, ButtonAnchor, ButtonAnchorProps, ButtonAnchorRouter, ButtonGroupSize, ButtonInputReset, ButtonInputResetProps, ButtonInputSubmit,
-    ButtonInputSubmitProps, ButtonProps, ButtonRouter, ButtonRouterProps, Buttons, ButtonsProps,
+    Button, ButtonAnchor, ButtonAnchorProps, ButtonAnchorRouter, ButtonGroupSize, ButtonInput, ButtonInputProps, ButtonInputType, ButtonProps,
+    ButtonRouter, ButtonRouterProps, Buttons, ButtonsProps,
 };
 pub use elements::content::{Content, ContentProps};
 pub use elements::delete::{Delete, DeleteProps};

@@ -8,6 +8,7 @@ use crate::{
         TagSection, TypographySection,
     },
     forms::FormSection,
+    theme_picker::ThemePicker,
 };
 use strum::{Display, EnumIter, IntoEnumIterator};
 use ybc::*;
@@ -229,6 +230,7 @@ pub fn content(props: &TabContentProps) -> Html {
                         click_behavior={ClickBehavior::Smooth}
                     />
                 </Menu>
+                <ThemePicker />
             </Column>
             <Column>
                 {props.children.clone()}

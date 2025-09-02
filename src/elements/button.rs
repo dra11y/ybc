@@ -234,49 +234,63 @@ pub fn button_anchor(props: &ButtonAnchorProps) -> Html {
 
 //////////////////////////////////////////////////////////////////////////////
 
-#[derive(Clone, Debug, Properties, PartialEq)]
-pub struct ButtonInputSubmitProps {
-    #[prop_or_default]
-    pub classes: Classes,
-    /// The submit handler to use for this component.
-    #[prop_or_default]
-    pub onsubmit: Callback<SubmitEvent>,
-    /// Render a loading spinner within this component.
-    #[prop_or_default]
-    pub loading: bool,
-    /// Make this component static.
-    #[prop_or_default]
-    pub r#static: bool,
-    /// Disable this component.
-    #[prop_or_default]
-    pub disabled: bool,
+#[derive(Debug, Clone, PartialEq, Display)]
+pub enum ButtonInputType {
+    #[display("button")]
+    Button(Callback<MouseEvent>),
+    #[display("submit")]
+    Submit(Callback<SubmitEvent>),
+    #[display("color")]
+    Color { onchange: Callback<Event>, hidden: bool },
+    #[display("reset")]
+    Reset(Callback<Event>),
 }
 
-/// An input element with `type="submit"` styled as a button.
-///
-/// [https://bulma.io/documentation/elements/button/](https://bulma.io/documentation/elements/button/)
-#[function_component(ButtonInputSubmit)]
-pub fn button_input_submit(props: &ButtonInputSubmitProps) -> Html {
-    let class = classes!(
-        "button",
-        props.classes.clone(),
-        props.loading.then_some("is-loading"),
-        props.r#static.then_some("is-static"),
-    );
-    html! {
-        <input type="submit" {class} onsubmit={props.onsubmit.clone()} disabled={props.disabled} />
+impl ButtonInputType {
+    pub fn onclick(&self) -> Option<Callback<MouseEvent>> {
+        match self {
+            ButtonInputType::Button(callback) => Some(callback.clone()),
+            _ => None,
+        }
+    }
+
+    pub fn onsubmit(&self) -> Option<Callback<SubmitEvent>> {
+        match self {
+            ButtonInputType::Submit(callback) => Some(callback.clone()),
+            _ => None,
+        }
+    }
+
+    pub fn onreset(&self) -> Option<Callback<Event>> {
+        match self {
+            ButtonInputType::Reset(callback) => Some(callback.clone()),
+            _ => None,
+        }
+    }
+
+    pub fn onchange(&self) -> Option<Callback<Event>> {
+        match self {
+            ButtonInputType::Color { onchange: callback, .. } => Some(callback.clone()),
+            _ => None,
+        }
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+impl Default for ButtonInputType {
+    fn default() -> Self {
+        ButtonInputType::Button(Callback::noop())
+    }
+}
 
 #[derive(Clone, Debug, Properties, PartialEq)]
-pub struct ButtonInputResetProps {
+pub struct ButtonInputProps {
+    /// The button type and click handler to use for this component.
+    #[prop_or_default]
+    pub r#type: ButtonInputType,
+    /// Optional button value
+    pub value: Option<AttrValue>,
     #[prop_or_default]
     pub classes: Classes,
-    /// The reset handler to use for this component.
-    #[prop_or_default]
-    pub onreset: Callback<Event>,
     /// Render a loading spinner within this component.
     #[prop_or_default]
     pub loading: bool,
@@ -286,20 +300,39 @@ pub struct ButtonInputResetProps {
     /// Disable this component.
     #[prop_or_default]
     pub disabled: bool,
+    #[prop_or_default]
+    pub style: Option<AttrValue>,
 }
 
-/// An input element with `type="reset"` styled as a button.
+/// An `<input type="...">` button of the given type.
 ///
 /// [https://bulma.io/documentation/elements/button/](https://bulma.io/documentation/elements/button/)
-#[function_component(ButtonInputReset)]
-pub fn button_input_reset(props: &ButtonInputResetProps) -> Html {
+#[function_component(ButtonInput)]
+pub fn button_input(props: &ButtonInputProps) -> Html {
     let class = classes!(
         "button",
         props.classes.clone(),
         props.loading.then_some("is-loading"),
         props.r#static.then_some("is-static"),
     );
+    let style = match props.r#type {
+        ButtonInputType::Color { hidden, .. } if hidden => Some(format!(
+            "{}; opacity: 0; width: 100%; height: 100%; cursor: pointer;",
+            props.style.clone().unwrap_or_default()
+        )),
+        _ => props.style.clone().map(|s| s.to_string()),
+    };
     html! {
-        <input type="reset" {class} onreset={props.onreset.clone()} disabled={props.disabled} />
+        <input
+            type={props.r#type.to_string()}
+            {class}
+            onclick={props.r#type.onclick()}
+            onsubmit={props.r#type.onsubmit()}
+            onreset={props.r#type.onreset()}
+            onchange={props.r#type.onchange()}
+            value={props.value.clone()}
+            disabled={props.disabled}
+            style={style}
+        />
     }
 }
