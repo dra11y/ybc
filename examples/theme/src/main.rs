@@ -5,12 +5,6 @@ use components::*;
 use general::*;
 
 use console_error_panic_hook::set_once as set_panic_hook;
-use gloo_timers::callback::Timeout;
-use std::cell::RefCell;
-use std::rc::Rc;
-use wasm_bindgen::closure::Closure;
-use wasm_bindgen::{JsCast, JsValue};
-use web_sys::{History, HtmlElement, window};
 use ybc::*;
 use yew::prelude::*;
 

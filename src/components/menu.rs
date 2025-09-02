@@ -33,8 +33,6 @@ pub fn menu(props: &MenuProps) -> Html {
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 #[derive(Clone, Debug, Properties, PartialEq)]
 pub struct MenuListProps {
     /// The child `li` elements of this list.
@@ -118,221 +116,196 @@ pub fn menu_list(props: &MenuListProps) -> Html {
             let uncontrolled = props.selected.is_none();
 
             // Scroll spy
-            {
-                let selected_id_elements = internal_selected.clone();
-                let scroll_lock = scroll_lock_effect.clone();
-                use_effect_with(
-                    (ids_vec.clone(), cfg_opt.clone(), uncontrolled),
-                    move |(ids_vec, cfg_opt, uncontrolled)| {
-                        let scroll_cb_holder: Rc<RefCell<Option<Closure<dyn FnMut(web_sys::Event)>>>> = Rc::new(RefCell::new(None));
-                        let wheel_cb_holder: Rc<RefCell<Option<Closure<dyn FnMut(web_sys::Event)>>>> = Rc::new(RefCell::new(None));
-                        let touch_cb_holder: Rc<RefCell<Option<Closure<dyn FnMut(web_sys::Event)>>>> = Rc::new(RefCell::new(None));
-                        let key_cb_holder: Rc<RefCell<Option<Closure<dyn FnMut(web_sys::Event)>>>> = Rc::new(RefCell::new(None));
+            // {
+            let selected_id_elements = internal_selected.clone();
+            let scroll_lock_clone = scroll_lock_effect.clone();
+            use_effect_with(
+                (ids_vec.clone(), cfg_opt.clone(), uncontrolled),
+                move |(ids_vec, cfg_opt, uncontrolled)| {
+                    let scroll_cb_holder: Rc<RefCell<Option<Closure<dyn FnMut(web_sys::Event)>>>> = Rc::new(RefCell::new(None));
+                    let wheel_cb_holder: Rc<RefCell<Option<Closure<dyn FnMut(web_sys::Event)>>>> = Rc::new(RefCell::new(None));
+                    let touch_cb_holder: Rc<RefCell<Option<Closure<dyn FnMut(web_sys::Event)>>>> = Rc::new(RefCell::new(None));
+                    let key_cb_holder: Rc<RefCell<Option<Closure<dyn FnMut(web_sys::Event)>>>> = Rc::new(RefCell::new(None));
 
-                        // Only run built-in scroll spy when:
-                        // - there are ids to observe,
-                        // - scroll spy is enabled via props,
-                        // - and selection is uncontrolled (no external `selected`).
-                        if !ids_vec.is_empty() && cfg_opt.is_some() && *uncontrolled {
+                    // Only run built-in scroll spy when:
+                    // - there are ids to observe,
+                    // - scroll spy is enabled via props,
+                    // - and selection is uncontrolled (no external `selected`).
+                    if !ids_vec.is_empty()
+                        && let Some(cfg) = cfg_opt
+                        && *uncontrolled
+                        && let Some(win) = window()
+                        && let Some(doc) = win.document()
+                    {
+                        // if !ids_vec.is_empty() && cfg_opt.is_some() && *uncontrolled {
+                        //     if let Some(win) = window() {
+                        //         if let Some(doc) = win.document() {
+                        let selected_id_setter = selected_id_elements.clone();
+                        let history: Option<History> = win.history().ok();
+                        let scroll_lock_for_effect = scroll_lock_clone.clone();
+                        let last_clicked_for_effect = last_clicked_id.clone();
+                        let ids_vec_owned = ids_vec.clone();
+
+                        // Shared updater used by both initial run and scroll listener
+                        let do_update: Rc<dyn Fn()> = {
+                            let doc = doc.clone();
+                            let selected_id_setter = selected_id_setter.clone();
+                            let history = history.clone();
+                            let ids_vec_owned = ids_vec_owned.clone();
+                            let cfg = cfg.clone();
+                            let scroll_lock_for_effect = scroll_lock_for_effect.clone();
+                            let last_clicked_for_effect = last_clicked_for_effect.clone();
+                            Rc::new(move || {
+                                let win = window();
+                                let current = win.as_ref().and_then(|w| w.scroll_y().ok()).unwrap_or(0.0);
+                                // Compute dynamic baseline (fixed/sticky at y=0)
+                                let mut baseline = 0.0_f64;
+                                if let Some(w) = win.clone() {
+                                    if let Some(doc2) = w.document() {
+                                        let inner_w = w.inner_width().ok().and_then(|v| v.as_f64()).unwrap_or(1024.0);
+                                        let list = doc2.elements_from_point((inner_w as f32) / 2.0, 0.0);
+                                        let len = list.length();
+                                        for i in 0..len {
+                                            let js = list.get(i);
+                                            if let Ok(elem) = js.dyn_into::<web_sys::Element>() {
+                                                let rect = elem.get_bounding_client_rect();
+                                                let mut include = false;
+                                                if let Some(w) = window() {
+                                                    if let Ok(style) = w.get_computed_style(&elem) {
+                                                        if let Some(style) = style {
+                                                            if let Ok(pos) = style.get_property_value("position") {
+                                                                let p = pos.trim();
+                                                                include = p == "fixed" || p == "sticky";
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                if include {
+                                                    if rect.top() <= 0.0 && rect.bottom() > 0.0 {
+                                                        baseline = baseline.max(rect.bottom());
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                let threshold = current + baseline + (cfg.offset_px as f64);
+                                // Choose last section whose absolute top <= threshold
+                                let mut candidate: Option<(String, f64)> = None;
+                                for id in &ids_vec_owned {
+                                    if let Some(el) = doc.get_element_by_id(id) {
+                                        let rect = el.get_bounding_client_rect();
+                                        let top = rect.top() + current;
+                                        if top <= threshold {
+                                            match candidate {
+                                                Some((_, best_top)) if best_top >= top => {}
+                                                _ => candidate = Some((id.clone(), top)),
+                                            }
+                                        }
+                                    }
+                                }
+                                let chosen_id = candidate.map(|(id, _)| id).or_else(|| ids_vec_owned.first().cloned());
+                                if let Some(id_str) = chosen_id {
+                                    if *scroll_lock_for_effect.borrow() {
+                                        if let Some(clicked) = last_clicked_for_effect.borrow().clone() {
+                                            if clicked == id_str {
+                                                // Arrived at target: unlock and clear
+                                                *scroll_lock_for_effect.borrow_mut() = false;
+                                                last_clicked_for_effect.borrow_mut().take();
+                                            } else {
+                                                // Still scrolling to target: do not update selection yet
+                                                return;
+                                            }
+                                        } else {
+                                            // Defensive: if locked but no target, unlock
+                                            *scroll_lock_for_effect.borrow_mut() = false;
+                                        }
+                                    }
+                                    let already = selected_id_setter
+                                        .as_ref()
+                                        .as_ref()
+                                        .map(|v| v.as_str().to_string())
+                                        .unwrap_or_default();
+                                    if already != id_str {
+                                        selected_id_setter.set(Some(id_str.clone().into()));
+                                        if cfg.update_hash {
+                                            if let Some(h) = &history {
+                                                let _ = h.replace_state_with_url(&JsValue::NULL, "", Some(&format!("#{id_str}")));
+                                            }
+                                        }
+                                    }
+                                }
+                            })
+                        };
+
+                        // Scroll listener: update in real time using the shared updater
+                        let do_update_cb = do_update.clone();
+                        let cb: Closure<dyn FnMut(web_sys::Event)> = Closure::wrap(Box::new(move |_| {
+                            (do_update_cb.as_ref())();
+                        }));
+                        win.add_event_listener_with_callback("scroll", cb.as_ref().unchecked_ref())
+                            .ok();
+                        scroll_cb_holder.borrow_mut().replace(cb);
+
+                        // Initial selection based on current viewport
+                        (do_update.as_ref())();
+
+                        // User input listeners: single unlock action reused for wheel/touch/key
+                        let unlock_action: Rc<dyn Fn()> = {
+                            let scroll_lock = scroll_lock_clone.clone();
+                            let last_clicked = last_clicked_id.clone();
+                            Rc::new(move || {
+                                if *scroll_lock.borrow() {
+                                    *scroll_lock.borrow_mut() = false;
+                                    last_clicked.borrow_mut().take();
+                                }
+                            })
+                        };
+                        // Attach all input listeners via one compact loop
+                        let input_listeners: Vec<(&'static str, Rc<RefCell<Option<Closure<dyn FnMut(web_sys::Event)>>>>)> = vec![
+                            ("wheel", wheel_cb_holder.clone()),
+                            ("touchmove", touch_cb_holder.clone()),
+                            ("keydown", key_cb_holder.clone()),
+                        ];
+                        for (ev, holder) in &input_listeners {
+                            let action = unlock_action.clone();
+                            let closure = Closure::wrap(Box::new(move |_e: web_sys::Event| {
+                                (action.as_ref())();
+                            }) as Box<dyn FnMut(_)>);
+                            let _ = win.add_event_listener_with_callback(ev, closure.as_ref().unchecked_ref());
+                            holder.borrow_mut().replace(closure);
+                        }
+
+                        // (Initial selection handled via do_update above)
+                        //     }
+                        // }
+                    }
+
+                    let holder = scroll_cb_holder.clone();
+                    let input_listeners: Vec<(&'static str, Rc<RefCell<Option<Closure<dyn FnMut(web_sys::Event)>>>>)> = vec![
+                        ("wheel", wheel_cb_holder.clone()),
+                        ("touchmove", touch_cb_holder.clone()),
+                        ("keydown", key_cb_holder.clone()),
+                    ];
+                    move || {
+                        if let Some(cb) = holder.borrow_mut().take() {
                             if let Some(win) = window() {
-                                if let Some(doc) = win.document() {
-                                    let selected_id_setter = selected_id_elements.clone();
-                                    let history: Option<History> = win.history().ok();
-                                    let scroll_lock_for_effect = scroll_lock.clone();
-                                    let last_clicked_for_effect = last_clicked_id.clone();
-                                    let ids_vec_owned = ids_vec.clone();
-                                    let cfg = cfg_opt.clone().unwrap_or_default();
-
-                                    // Shared updater used by both initial run and scroll listener
-                                    let do_update: Rc<dyn Fn()> = {
-                                        let doc = doc.clone();
-                                        let selected_id_setter = selected_id_setter.clone();
-                                        let history = history.clone();
-                                        let ids_vec_owned = ids_vec_owned.clone();
-                                        let cfg = cfg.clone();
-                                        let scroll_lock_for_effect = scroll_lock_for_effect.clone();
-                                        let last_clicked_for_effect = last_clicked_for_effect.clone();
-                                        Rc::new(move || {
-                                            let win = window();
-                                            let current = win.as_ref().and_then(|w| w.scroll_y().ok()).unwrap_or(0.0);
-                                            // Compute dynamic baseline (fixed/sticky at y=0)
-                                            let mut baseline = 0.0_f64;
-                                            if let Some(w) = win.clone() {
-                                                if let Some(doc2) = w.document() {
-                                                    let inner_w = w.inner_width().ok().and_then(|v| v.as_f64()).unwrap_or(1024.0);
-                                                    let list = doc2.elements_from_point((inner_w as f32) / 2.0, 0.0);
-                                                    let len = list.length();
-                                                    for i in 0..len {
-                                                        let js = list.get(i);
-                                                        if let Ok(elem) = js.dyn_into::<web_sys::Element>() {
-                                                            let rect = elem.get_bounding_client_rect();
-                                                            let mut include = false;
-                                                            if let Some(w) = window() {
-                                                                if let Ok(style) = w.get_computed_style(&elem) {
-                                                                    if let Some(style) = style {
-                                                                        if let Ok(pos) = style.get_property_value("position") {
-                                                                            let p = pos.trim();
-                                                                            include = p == "fixed" || p == "sticky";
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                            if include {
-                                                                if rect.top() <= 0.0 && rect.bottom() > 0.0 {
-                                                                    baseline = baseline.max(rect.bottom());
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            let threshold = current + baseline + (cfg.offset_px as f64);
-                                            // Choose last section whose absolute top <= threshold
-                                            let mut candidate: Option<(String, f64)> = None;
-                                            for id in &ids_vec_owned {
-                                                if let Some(el) = doc.get_element_by_id(id) {
-                                                    let rect = el.get_bounding_client_rect();
-                                                    let top = rect.top() + current;
-                                                    if top <= threshold {
-                                                        match candidate {
-                                                            Some((_, best_top)) if best_top >= top => {}
-                                                            _ => candidate = Some((id.clone(), top)),
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            let chosen_id = candidate.map(|(id, _)| id).or_else(|| ids_vec_owned.first().cloned());
-                                            if let Some(id_str) = chosen_id {
-                                                if *scroll_lock_for_effect.borrow() {
-                                                    if let Some(clicked) = last_clicked_for_effect.borrow().clone() {
-                                                        if clicked == id_str {
-                                                            // Arrived at target: unlock and clear
-                                                            *scroll_lock_for_effect.borrow_mut() = false;
-                                                            last_clicked_for_effect.borrow_mut().take();
-                                                        } else {
-                                                            // Still scrolling to target: do not update selection yet
-                                                            return;
-                                                        }
-                                                    } else {
-                                                        // Defensive: if locked but no target, unlock
-                                                        *scroll_lock_for_effect.borrow_mut() = false;
-                                                    }
-                                                }
-                                                let already = selected_id_setter
-                                                    .as_ref()
-                                                    .as_ref()
-                                                    .map(|v| v.as_str().to_string())
-                                                    .unwrap_or_default();
-                                                if already != id_str {
-                                                    selected_id_setter.set(Some(id_str.clone().into()));
-                                                    if cfg.update_hash {
-                                                        if let Some(h) = &history {
-                                                            let _ = h.replace_state_with_url(&JsValue::NULL, "", Some(&format!("#{id_str}")));
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        })
-                                    };
-
-                                    // Scroll listener: update in real time using the shared updater
-                                    let do_update_cb = do_update.clone();
-                                    let cb: Closure<dyn FnMut(web_sys::Event)> = Closure::wrap(Box::new(move |_| {
-                                        (do_update_cb.as_ref())();
-                                    }));
-                                    win.add_event_listener_with_callback("scroll", cb.as_ref().unchecked_ref())
-                                        .ok();
-                                    scroll_cb_holder.borrow_mut().replace(cb);
-
-                                    // Initial selection based on current viewport
-                                    (do_update.as_ref())();
-
-                                    // User input listeners: unlock lock immediately on wheel/touch/key
-                                    let unlock = {
-                                        let scroll_lock = scroll_lock.clone();
-                                        let last_clicked = last_clicked_id.clone();
-                                        move || {
-                                            if *scroll_lock.borrow() {
-                                                *scroll_lock.borrow_mut() = false;
-                                                last_clicked.borrow_mut().take();
-                                            }
-                                        }
-                                    };
-                                    let on_wheel = Closure::wrap(Box::new(move |_e: web_sys::Event| {
-                                        unlock();
-                                    }) as Box<dyn FnMut(_)>);
-                                    win.add_event_listener_with_callback("wheel", on_wheel.as_ref().unchecked_ref())
-                                        .ok();
-                                    wheel_cb_holder.borrow_mut().replace(on_wheel);
-                                    let unlock = {
-                                        let scroll_lock = scroll_lock.clone();
-                                        let last_clicked = last_clicked_id.clone();
-                                        move || {
-                                            if *scroll_lock.borrow() {
-                                                *scroll_lock.borrow_mut() = false;
-                                                last_clicked.borrow_mut().take();
-                                            }
-                                        }
-                                    };
-                                    let on_touch = Closure::wrap(Box::new(move |_e: web_sys::Event| {
-                                        unlock();
-                                    }) as Box<dyn FnMut(_)>);
-                                    win.add_event_listener_with_callback("touchmove", on_touch.as_ref().unchecked_ref())
-                                        .ok();
-                                    touch_cb_holder.borrow_mut().replace(on_touch);
-                                    let unlock = {
-                                        let scroll_lock = scroll_lock.clone();
-                                        let last_clicked = last_clicked_id.clone();
-                                        move || {
-                                            if *scroll_lock.borrow() {
-                                                *scroll_lock.borrow_mut() = false;
-                                                last_clicked.borrow_mut().take();
-                                            }
-                                        }
-                                    };
-                                    let on_key = Closure::wrap(Box::new(move |_e: web_sys::Event| {
-                                        unlock();
-                                    }) as Box<dyn FnMut(_)>);
-                                    win.add_event_listener_with_callback("keydown", on_key.as_ref().unchecked_ref())
-                                        .ok();
-                                    key_cb_holder.borrow_mut().replace(on_key);
-
-                                    // (Initial selection handled via do_update above)
+                                let _ = win.remove_event_listener_with_callback("scroll", cb.as_ref().unchecked_ref());
+                            }
+                        }
+                        for (ev, h) in input_listeners {
+                            if let Some(cb) = h.borrow_mut().take() {
+                                if let Some(win) = window() {
+                                    let _ = win.remove_event_listener_with_callback(ev, cb.as_ref().unchecked_ref());
                                 }
                             }
                         }
+                    }
+                },
+            );
+            // }
 
-                        let holder = scroll_cb_holder.clone();
-                        let wheel_holder = wheel_cb_holder.clone();
-                        let touch_holder = touch_cb_holder.clone();
-                        let key_holder = key_cb_holder.clone();
-                        move || {
-                            if let Some(cb) = holder.borrow_mut().take() {
-                                if let Some(win) = window() {
-                                    let _ = win.remove_event_listener_with_callback("scroll", cb.as_ref().unchecked_ref());
-                                }
-                            }
-                            if let Some(cb) = wheel_holder.borrow_mut().take() {
-                                if let Some(win) = window() {
-                                    let _ = win.remove_event_listener_with_callback("wheel", cb.as_ref().unchecked_ref());
-                                }
-                            }
-                            if let Some(cb) = touch_holder.borrow_mut().take() {
-                                if let Some(win) = window() {
-                                    let _ = win.remove_event_listener_with_callback("touchmove", cb.as_ref().unchecked_ref());
-                                }
-                            }
-                            if let Some(cb) = key_holder.borrow_mut().take() {
-                                if let Some(win) = window() {
-                                    let _ = win.remove_event_listener_with_callback("keydown", cb.as_ref().unchecked_ref());
-                                }
-                            }
-                        }
-                    },
-                );
-            }
-
-            // Create click behavior callback with scroll lock (like Elements example)
+            // Create click behavior callback with scroll lock
             let scroll_lock_for_click = scroll_lock.clone();
             let last_clicked_for_click = last_clicked_id_clone_for_click.clone();
             let original_onselect = props.onselect.clone();
@@ -453,8 +426,6 @@ pub enum ClickBehavior {
     Smooth,
     Timed { ms: u32 },
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 #[derive(Clone, Debug, Properties, PartialEq)]
 pub struct MenuLabelProps {
