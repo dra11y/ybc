@@ -1,9 +1,9 @@
 @use "../bulma" with (
-    $family-primary: '"Nunito", sans-serif',
+    // $family-primary: '"Nunito", sans-serif',
     $primary: rgb(42, 106, 175),
 );
 
-@import url("https://fonts.googleapis.com/css?family=Nunito:400,700");
+// @import url("https://fonts.googleapis.com/css?family=Nunito:400,700");
 
 :root {
     scroll-behavior: smooth;

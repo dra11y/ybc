@@ -24,60 +24,13 @@ pub enum TabId {
 }
 
 impl TabId {
-    pub fn tabs() -> Vec<Tab> {
-        Self::iter().map(|t| t.tab()).collect()
-    }
-
-    pub fn tab(&self) -> Tab {
-        Tab {
-            id: self.id().into(),
-            label: self.title().into(),
-            icon_class: None,
-        }
-    }
-
-    /// Returns the TabId from the location hash.
-    /// If not found, checks for a SectionId that matches, then returns
-    /// that Section's TabId.
-    pub fn from_id(id: Option<&str>) -> Option<Self> {
-        id.and_then(|id| Self::iter().find(|t| t.id() == id))
-            .or_else(|| Some(SectionId::from_id(id)?.tab_id()))
-    }
-
-    pub fn id(&self) -> String {
-        self.title().to_lowercase().replace(" ", "-")
-    }
-
-    pub fn link(&self) -> String {
-        format!("#{}", self.id())
-    }
-
-    pub fn title(&self) -> String {
-        self.to_string()
-    }
-
-    pub fn section_ids(&self) -> Vec<SectionId> {
-        SectionId::iter().filter(|s| s.tab_id() == *self).collect()
-    }
-
-    pub fn default_section_id(&self) -> Option<SectionId> {
-        self.section_ids().first().cloned()
-    }
-
-    pub fn menu_items(&self) -> Vec<MenuItem> {
-        SectionId::iter()
-            .filter(|s| s.tab_id() == *self)
-            .map(|s| s.menu_item())
-            .collect()
-    }
-
     pub fn tab_content(&self) -> Html {
         html! {
             <TabContent tab={*self}>{match self {
                 TabId::Elements => html! {<>
+                    <ButtonSection />
                     <TypographySection />
                     <BoxSection />
-                    <ButtonSection />
                     <ContentSection />
                     <DeleteSection />
                     <IconSection />
@@ -115,9 +68,9 @@ impl TabId {
 #[strum(serialize_all = "title_case")]
 pub enum SectionId {
     // Elements
+    Button,
     Typography,
     Box,
-    Button,
     Content,
     Delete,
     Icon,
@@ -203,6 +156,57 @@ impl SectionId {
             href: self.link().into(),
             children: None,
         }
+    }
+}
+
+impl TabId {
+    pub fn tabs() -> Vec<Tab> {
+        Self::iter().map(|t| t.tab()).collect()
+    }
+
+    pub fn tab(&self) -> Tab {
+        Tab {
+            id: self.id().into(),
+            label: self.title().into(),
+            icon_class: None,
+        }
+    }
+
+    /// Returns the TabId from the location hash.
+    /// If not found, checks for a SectionId that matches, then returns
+    /// that Section's TabId.
+    pub fn from_id(id: Option<&str>) -> Option<Self> {
+        id.and_then(|id| Self::iter().find(|t| t.id() == id))
+            .or_else(|| Some(SectionId::from_id(id)?.tab_id()))
+    }
+
+    pub fn id(&self) -> String {
+        self.title().to_lowercase().replace(" ", "-")
+    }
+
+    pub fn link(&self) -> String {
+        format!("#{}", self.id())
+    }
+
+    pub fn title(&self) -> String {
+        self.to_string()
+    }
+
+    #[allow(unused)]
+    pub fn section_ids(&self) -> Vec<SectionId> {
+        SectionId::iter().filter(|s| s.tab_id() == *self).collect()
+    }
+
+    #[allow(unused)]
+    pub fn default_section_id(&self) -> Option<SectionId> {
+        self.section_ids().first().cloned()
+    }
+
+    pub fn menu_items(&self) -> Vec<MenuItem> {
+        SectionId::iter()
+            .filter(|s| s.tab_id() == *self)
+            .map(|s| s.menu_item())
+            .collect()
     }
 }
 
