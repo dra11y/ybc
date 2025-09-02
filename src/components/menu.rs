@@ -18,6 +18,9 @@ pub struct MenuProps {
     pub children: Children,
     #[prop_or_default]
     pub classes: Classes,
+    /// Extra property that adds sticky style: position: sticky; <value> e.g. top: 1rem
+    #[prop_or_default]
+    pub sticky: Option<AttrValue>,
 }
 
 /// A simple menu, for any type of vertical navigation.
@@ -26,8 +29,9 @@ pub struct MenuProps {
 #[function_component(Menu)]
 pub fn menu(props: &MenuProps) -> Html {
     let class = classes!("menu", props.classes.clone());
+    let sticky = props.sticky.as_ref().map(|s| format!("position: sticky; {s}"));
     html! {
-        <aside class={class}>
+        <aside class={class} style={sticky}>
             {props.children.clone()}
         </aside>
     }
