@@ -1,14 +1,168 @@
 mod components;
 mod general;
 
-use components::*;
-use general::*;
-
+use components::{
+    BreadcrumbSection, CardSection, DropdownSection, HeroSection, MediaSection, MenuSection, MessageSection, ModalSection, NavbarSection,
+    PaginationSection, PanelSection, TabsSection,
+};
 use console_error_panic_hook::set_once as set_panic_hook;
+use general::{
+    BoxSection, ButtonSection, ContentSection, DeleteSection, FormSection, IconSection, ImagesSection, NotificationsSection, ProgressSection,
+    TableSection, TagSection, TypographySection,
+};
+use strum::{Display, EnumIter, IntoEnumIterator};
 use ybc::*;
 use yew::prelude::*;
 
 // template: https://jenil.github.io/bulmaswatch/darkly/
+
+#[derive(Clone, Copy, Debug, Display, Hash, EnumIter, PartialEq, Eq, PartialOrd, Ord)]
+#[strum(serialize_all = "title_case")]
+pub enum TabId {
+    Elements,
+    Components,
+    Forms,
+    Columns,
+    Grid,
+    Layout,
+}
+
+impl TabId {
+    pub fn title(&self) -> String {
+        self.to_string()
+    }
+
+    pub fn section_ids(&self) -> Vec<SectionId> {
+        SectionId::iter().filter(|s| s.tab_id() == *self).collect()
+    }
+
+    pub fn menu_items(&self) -> Vec<MenuItem> {
+        SectionId::iter()
+            .filter(|s| s.tab_id() == *self)
+            .map(|s| s.menu_item())
+            .collect()
+    }
+}
+
+#[derive(Clone, Copy, Debug, Display, Hash, EnumIter, PartialEq, Eq, PartialOrd, Ord)]
+#[strum(serialize_all = "title_case")]
+pub enum SectionId {
+    // Elements
+    Typography,
+    Box,
+    Button,
+    Content,
+    Delete,
+    Icon,
+    Image,
+    Notification,
+    Progress,
+    Table,
+    Tag,
+
+    // Components
+    Breadcrumb,
+    Card,
+    Dropdown,
+    Menu,
+    Message,
+    Modal,
+    Navbar,
+    Pagination,
+    Panel,
+    Tabs,
+
+    // Form
+    VerticalForm,
+    HorizontalForm,
+
+    // Layout
+    Hero,
+    MediaObject,
+}
+
+impl SectionId {
+    pub fn tab_id(&self) -> TabId {
+        match self {
+            SectionId::Typography
+            | SectionId::Box
+            | SectionId::Button
+            | SectionId::Content
+            | SectionId::Delete
+            | SectionId::Icon
+            | SectionId::Image
+            | SectionId::Notification
+            | SectionId::Progress
+            | SectionId::Table
+            | SectionId::Tag => TabId::Elements,
+
+            SectionId::Breadcrumb
+            | SectionId::Card
+            | SectionId::Dropdown
+            | SectionId::Menu
+            | SectionId::Message
+            | SectionId::Modal
+            | SectionId::Navbar
+            | SectionId::Pagination
+            | SectionId::Panel
+            | SectionId::Tabs => TabId::Components,
+
+            SectionId::VerticalForm | SectionId::HorizontalForm => TabId::Forms,
+
+            SectionId::Hero | SectionId::MediaObject => TabId::Layout,
+        }
+    }
+
+    pub fn id(&self) -> String {
+        self.title().to_lowercase().replace(" ", "-")
+    }
+
+    pub fn link(&self) -> String {
+        format!("#{}", self.id())
+    }
+
+    pub fn title(&self) -> String {
+        self.to_string()
+    }
+
+    pub fn menu_item(&self) -> MenuItem {
+        MenuItem {
+            id: self.id().into(),
+            label: self.title().into(),
+            href: self.link().into(),
+            children: None,
+        }
+    }
+}
+
+#[derive(Clone, Debug, Properties, PartialEq)]
+pub struct TabContentProps {
+    pub tab: TabId,
+    pub children: Children,
+}
+
+#[function_component(TabContent)]
+pub fn content(props: &TabContentProps) -> Html {
+    html! {
+        <Columns>
+            <Column classes="is-2">
+                // <div style="position: sticky; top: 1rem;">
+                    <ybc::Menu>
+                        <ybc::MenuLabel text={props.tab.title()} />
+                        <ybc::MenuList
+                            items={Some(props.tab.menu_items())}
+                            scroll_spy={Some(ybc::ScrollSpyConfig::default())}
+                            click_behavior={ybc::ClickBehavior::Smooth}
+                        />
+                    </ybc::Menu>
+                // </div>
+            </Column>
+            <Column>
+                {props.children.clone()}
+            </Column>
+        </Columns>
+    }
+}
 
 #[function_component(App)]
 pub fn app() -> Html {
@@ -27,166 +181,60 @@ pub fn app() -> Html {
                     {
                         match *active_tab {
                             // Elements
-                            0 => {
-                                // Elements tab: list of anchors and ids
-                                let items = vec![
-                                    MenuItem { id: "typography".into(), label: "Typography".into(), href: "#typography".into(), children: None },
-                                    MenuItem { id: "box".into(), label: "Box".into(), href: "#box".into(), children: None },
-                                    MenuItem { id: "button".into(), label: "Button".into(), href: "#button".into(), children: None },
-                                    MenuItem { id: "content".into(), label: "Content".into(), href: "#content".into(), children: None },
-                                    MenuItem { id: "delete".into(), label: "Delete".into(), href: "#delete".into(), children: None },
-                                    MenuItem { id: "icon".into(), label: "Icon".into(), href: "#icon".into(), children: None },
-                                    MenuItem { id: "images".into(), label: "Image".into(), href: "#images".into(), children: None },
-                                    MenuItem { id: "notifications".into(), label: "Notification".into(), href: "#notifications".into(), children: None },
-                                    MenuItem { id: "progress".into(), label: "Progress".into(), href: "#progress".into(), children: None },
-                                    MenuItem { id: "table".into(), label: "Table".into(), href: "#table".into(), children: None },
-                                    MenuItem { id: "tag".into(), label: "Tag".into(), href: "#tag".into(), children: None },
-                                ];
-
-                                html!{
-                                    <Columns>
-                                        <Column classes="is-2">
-                                            <div style="position: sticky; top: 1rem;">
-                                                <ybc::Menu>
-                                                    <ybc::MenuLabel text="Elements" />
-                            <ybc::MenuList
-                                                        items={Some(items)}
-
-                                                        scroll_spy={Some(ybc::ScrollSpyConfig::default())}
-                                                        click_behavior={ybc::ClickBehavior::Smooth}
-
-
-                                                        />
-                                                </ybc::Menu>
-                                            </div>
-                                        </Column>
-                                        <Column>
-                                            <TypographySection />
-                                            <BoxSection />
-                                            <ButtonSection />
-                                            <ContentSection />
-                                            <DeleteSection />
-                                            <IconSection />
-                                            <ImagesSection />
-                                            <NotificationsSection />
-                                            <ProgressSection />
-                                            <TableSection />
-                                            <TagSection />
-                                        </Column>
-                                    </Columns>
-                                }
+                            0 => html!{
+                                <TabContent tab={TabId::Elements}>
+                                    <TypographySection />
+                                    <BoxSection />
+                                    <ButtonSection />
+                                    <ContentSection />
+                                    <DeleteSection />
+                                    <IconSection />
+                                    <ImagesSection />
+                                    <NotificationsSection />
+                                    <ProgressSection />
+                                    <TableSection />
+                                    <TagSection />
+                                </TabContent>
                             },
-                            // Components (using library scroll-spy feature)
-                            1 => {
-                                let components_items = vec![
-                                    MenuItem { id: "breadcrumb".into(), label: "Breadcrumb".into(), href: "#breadcrumb".into(), children: None },
-                                    MenuItem { id: "card".into(), label: "Card".into(), href: "#card".into(), children: None },
-                                    MenuItem { id: "dropdown".into(), label: "Dropdown".into(), href: "#dropdown".into(), children: None },
-                                    MenuItem { id: "menu".into(), label: "Menu".into(), href: "#menu".into(), children: None },
-                                    MenuItem { id: "message".into(), label: "Message".into(), href: "#message".into(), children: None },
-                                    MenuItem { id: "modal".into(), label: "Modal".into(), href: "#modal".into(), children: None },
-                                    MenuItem { id: "navbar".into(), label: "Navbar".into(), href: "#navbar".into(), children: None },
-                                    MenuItem { id: "pagination".into(), label: "Pagination".into(), href: "#pagination".into(), children: None },
-                                    MenuItem { id: "panel".into(), label: "Panel".into(), href: "#panel".into(), children: None },
-                                    MenuItem { id: "tabs".into(), label: "Tabs".into(), href: "#tabs".into(), children: None },
-                                ];
-
-                                html!{
-                                    <Columns>
-                                        <Column classes="is-2">
-                                            <div style="position: sticky; top: 1rem;">
-                                                <ybc::Menu>
-                                                    <ybc::MenuLabel text="Components" />
-                                                    <ybc::MenuList
-                                                        items={Some(components_items)}
-                                                        scroll_spy={Some(ybc::ScrollSpyConfig::default())}
-                                                        click_behavior={ybc::ClickBehavior::Smooth}
-                                                    />
-                                                </ybc::Menu>
-                                            </div>
-                                        </Column>
-                                        <Column>
-                                            <BreadcrumbSection />
-                                            <CardSection />
-                                            <DropdownSection />
-                                            <MenuSection />
-                                            <MessageSection />
-                                            <ModalSection />
-                                            <NavbarSection />
-                                            <PaginationSection />
-                                            <PanelSection />
-                                            <TabsSection />
-                                        </Column>
-                                    </Columns>
-                                }
+                            // Components
+                            1 => html! {
+                                <TabContent tab={TabId::Components}>
+                                    <BreadcrumbSection />
+                                    <CardSection />
+                                    <DropdownSection />
+                                    <MenuSection />
+                                    <MessageSection />
+                                    <ModalSection />
+                                    <NavbarSection />
+                                    <PaginationSection />
+                                    <PanelSection />
+                                    <TabsSection />
+                                </TabContent>
                             },
                             // Form
-                            2 => html!{
-                                <Columns>
-                                    <Column classes="is-2">
-                                        <div style="position: sticky; top: 1rem;">
-                                            <ybc::Menu>
-                                                <ybc::MenuLabel text="Form" />
-                                                <ybc::MenuList>
-                                                    <li><a href="#form">{"General"}</a></li>
-                                                </ybc::MenuList>
-                                            </ybc::Menu>
-                                        </div>
-                                    </Column>
-                                    <Column>
-                                        <FormSection />
-                                    </Column>
-                                </Columns>
+                            2 => html! {
+                                <TabContent tab={TabId::Forms}>
+                                    <FormSection />
+                                </TabContent>
                             },
-                            // Columns (no example components yet)
-                            3 => html!{
-                                <Columns>
-                                    <Column classes="is-2">
-                                        <div style="position: sticky; top: 1rem;">
-                                            <ybc::Menu>
-                                                <ybc::MenuLabel text="Columns" />
-                                            </ybc::Menu>
-                                        </div>
-                                    </Column>
-                                    <Column>
-                                        // Intentionally left blank: no columns examples in this theme yet
-                                    </Column>
-                                </Columns>
+                            // Columns
+                            3 => html! {
+                                <TabContent tab={TabId::Columns}>
+                                    <></>
+                                </TabContent>
                             },
                             // Grid (no example components yet)
-                            4 => html!{
-                                <Columns>
-                                    <Column classes="is-2">
-                                        <div style="position: sticky; top: 1rem;">
-                                            <ybc::Menu>
-                                                <ybc::MenuLabel text="Grid" />
-                                            </ybc::Menu>
-                                        </div>
-                                    </Column>
-                                    <Column>
-                                        // Intentionally left blank: no grid examples in this theme yet
-                                    </Column>
-                                </Columns>
+                            4 => html! {
+                                <TabContent tab={TabId::Grid}>
+                                    <></>
+                                </TabContent>
                             },
                             // Layout
-                            _ => html!{
-                                <Columns>
-                                    <Column classes="is-2">
-                                        <div style="position: sticky; top: 1rem;">
-                                            <ybc::Menu>
-                                                <ybc::MenuLabel text="Layout" />
-                                                <ybc::MenuList>
-                                                    <li><a href="#hero">{"Hero"}</a></li>
-                                                    <li><a href="#media">{"Media Object"}</a></li>
-                                                </ybc::MenuList>
-                                            </ybc::Menu>
-                                        </div>
-                                    </Column>
-                                    <Column>
-                                        <HeroSection />
-                                        <MediaSection />
-                                    </Column>
-                                </Columns>
+                            _ => html! {
+                                <TabContent tab={TabId::Layout}>
+                                    <HeroSection />
+                                    <MediaSection />
+                                </TabContent>
                             },
                         }
                     }
@@ -253,46 +301,6 @@ fn header(props: &HeaderProps) -> Html {
                 })}
             />
         </>
-    }
-}
-
-#[function_component(SidebarMenu)]
-fn sidebar_menu() -> Html {
-    html! {
-        <ybc::Menu>
-            <ybc::MenuLabel text="General" />
-            <ybc::MenuList>
-                <li><a href="#typography">{"Typography"}</a></li>
-                <li><a href="#box">{"Box"}</a></li>
-                <li><a href="#button">{"Button"}</a></li>
-                <li><a href="#content">{"Content"}</a></li>
-                <li><a href="#delete">{"Delete"}</a></li>
-                <li><a href="#form">{"Form"}</a></li>
-                <li><a href="#icon">{"Icons"}</a></li>
-                <li><a href="#images">{"Images"}</a></li>
-                <li><a href="#notifications">{"Notifications"}</a></li>
-                <li><a href="#progress">{"Progress"}</a></li>
-                <li><a href="#table">{"Table"}</a></li>
-                <li><a href="#tag">{"Tag"}</a></li>
-            </ybc::MenuList>
-            <ybc::MenuLabel text="Components" />
-            <ybc::MenuList>
-                <li><a href="#breadcrumb">{"Breadcrumb"}</a></li>
-                <li><a href="#hero">{"Hero"}</a></li>
-                <li><a href="#card">{"Card"}</a></li>
-                <li><a href="#dropdown">{"Dropdown"}</a></li>
-                <li><a href="#level">{"Level"}</a></li>
-                <li><a href="#media">{"Media"}</a></li>
-                <li><a href="#menu">{"Menu"}</a></li>
-                <li><a href="#message">{"Message"}</a></li>
-                <li><a href="#modal">{"Modal"}</a></li>
-                <li><a href="#navbar">{"Navbar"}</a></li>
-                <li><a href="#pagination">{"Pagination"}</a></li>
-                <li><a href="#panel">{"Panel"}</a></li>
-                <li><a href="#tabs">{"Tabs"}</a></li>
-                <li><a href="#footer">{"Footer"}</a></li>
-            </ybc::MenuList>
-        </ybc::Menu>
     }
 }
 

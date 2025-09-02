@@ -98,7 +98,7 @@ pub enum ModalMsg {
 #[derive(Clone, Debug, Properties, PartialEq)]
 pub struct ModalProps {
     /// The ID of this modal, used for triggering close events from other parts of the app.
-    pub id: String,
+    pub id: AttrValue,
     /// The modal handle that controls this modal's state
     pub handle: UseModalHandle,
     /// The content of the `"modal-content"` element.
@@ -130,9 +130,9 @@ pub fn modal(props: &ModalProps) -> Html {
         let handle = props.handle.clone();
         let context = use_context::<ModalContext>();
 
-        use_effect_with(id.clone(), move |id| {
+        use_effect_with(id, move |id| {
             if let Some(context) = context {
-                context.register(id.clone(), handle);
+                context.register(id.to_string(), handle);
             }
             || {}
         });
@@ -191,7 +191,7 @@ pub fn modal(props: &ModalProps) -> Html {
 #[derive(Clone, Debug, Properties, PartialEq)]
 pub struct ModalCardProps {
     /// The ID of this modal, used for triggering close events from other parts of the app.
-    pub id: String,
+    pub id: AttrValue,
     /// The modal handle that controls this modal's state
     pub handle: UseModalHandle,
     /// The title of this modal.
@@ -229,9 +229,9 @@ pub fn modal_card(props: &ModalCardProps) -> Html {
         let handle = props.handle.clone();
         let context = use_context::<ModalContext>();
 
-        use_effect_with(id.clone(), move |id| {
+        use_effect_with(id, move |id| {
             if let Some(context) = context {
-                context.register(id.clone(), handle);
+                context.register(id.to_string(), handle);
             }
             || {}
         });

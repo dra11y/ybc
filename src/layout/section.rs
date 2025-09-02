@@ -3,6 +3,9 @@ use yew::prelude::*;
 
 #[derive(Clone, Debug, Properties, PartialEq)]
 pub struct SectionProps {
+    /// The ID of this Section
+    #[prop_or_default]
+    pub id: Option<AttrValue>,
     #[prop_or_default]
     pub children: Children,
     #[prop_or_default]
@@ -19,7 +22,7 @@ pub struct SectionProps {
 pub fn section(props: &SectionProps) -> Html {
     let size = props.size.as_ref().map(|size| size.to_string());
     html! {
-        <section class={classes!("section", props.classes.clone(), size)}>
+        <section id={props.id.clone()} class={classes!("section", props.classes.clone(), size)}>
             {props.children.clone()}
         </section>
     }

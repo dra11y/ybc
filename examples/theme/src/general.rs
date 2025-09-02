@@ -5,8 +5,7 @@ use yew::prelude::*;
 pub fn typography_section() -> Html {
     html! {
         <>
-            <div id="typography"></div>
-            <Section>
+            <Section id="typography">
                 <Title tag="h1" size={HeaderSize::Is1}>{"Typography"}</Title>
                 <hr />
                 <Columns>
@@ -46,8 +45,7 @@ pub fn typography_section() -> Html {
 pub fn box_section() -> Html {
     html! {
         <>
-            <div id="box"></div>
-            <Section>
+            <Section id="box">
                 <Title tag="h1" size={HeaderSize::Is1}>{"Box"}</Title>
                 <hr />
                 <BBox>
@@ -106,8 +104,7 @@ pub fn box_section() -> Html {
 pub fn button_section() -> Html {
     html! {
         <>
-            <div id="button"></div>
-            <Section>
+            <Section id="button">
                 <Title tag="h1" size={HeaderSize::Is1}>{"Button"}</Title>
                 <hr />
                 <Columns>
@@ -378,8 +375,7 @@ pub fn button_section() -> Html {
 pub fn content_section() -> Html {
     html! {
         <>
-            <div id="content"></div>
-            <Section>
+            <Section id="content">
                 <Title tag="h1" size={HeaderSize::Is1}>{"Content"}</Title>
                 <hr />
                 <Content>
@@ -472,8 +468,7 @@ pub fn content_section() -> Html {
 pub fn delete_section() -> Html {
     html! {
         <>
-            <div id="delete"></div>
-            <Section>
+            <Section id="delete">
                 <Title tag="h1" size={HeaderSize::Is1}>{"Delete"}</Title>
                 <hr />
                 <Block>
@@ -519,8 +514,7 @@ pub fn form_section() -> Html {
     let file6 = use_state(Vec::new);
     html! {
         <>
-            <div id="form"></div>
-            <Section>
+            <Section id="form">
                 <Title tag="h1" size={HeaderSize::Is1}>{"Form"}</Title>
                 <hr />
                 <Columns>
@@ -1006,8 +1000,7 @@ pub fn form_section() -> Html {
 pub fn icon_section() -> Html {
     html! {
         <>
-            <div id="icon"></div>
-            <Section>
+            <Section id="icon">
                 <Title tag="h1" size={HeaderSize::Is1}>{"Icon"}</Title>
                 <hr />
                 <Columns>
@@ -1151,8 +1144,7 @@ pub fn icon_section() -> Html {
 pub fn images_section() -> Html {
     html! {
         <>
-            <div id="images"></div>
-            <Section>
+            <Section id="images">
                 <Title tag="h1" size={HeaderSize::Is1}>{"Images"}</Title>
                 <hr />
                 <div class="fixed-grid has-7-cols is-flex">
@@ -1241,8 +1233,7 @@ pub fn images_section() -> Html {
 pub fn notifications_section() -> Html {
     html! {
         <>
-            <div id="notifications"></div>
-            <Section>
+            <Section id="notifications">
                 <Title tag="h1" size={HeaderSize::Is1}>{"Notifications"}</Title>
                 <hr />
                 <Columns classes="is-multiline">
@@ -1312,8 +1303,7 @@ pub fn notifications_section() -> Html {
 pub fn progress_section() -> Html {
     html! {
         <>
-            <div id="progress"></div>
-            <Section>
+            <Section id="progress">
                 <Title tag="h1" size={HeaderSize::Is1}>{"Progress"}</Title>
                 <hr />
                 <Progress classes="is-small" max={100.0} value={Some(14.3)} />
@@ -1338,8 +1328,7 @@ pub fn progress_section() -> Html {
 pub fn table_section() -> Html {
     html! {
         <>
-            <div id="table"></div>
-            <Section>
+            <Section id="table">
                 <Title tag="h1" size={HeaderSize::Is1}>{"Table"}</Title>
                 <hr />
                 <Table>
@@ -1570,8 +1559,7 @@ pub fn table_section() -> Html {
 pub fn tag_section() -> Html {
     html! {
         <>
-            <div id="tag"></div>
-            <Section>
+            <Section id="tag">
                 <Title tag="h1" size={HeaderSize::Is1}>{"Tag"}</Title>
                 <hr />
                 <div class="tags">

@@ -11,6 +11,8 @@ ybc = { path = "../../", features = ["scroll-spy"] }
 yew = "0.21"
 js-sys = "0.3"
 gloo-timers = "0.3"
+derive_more = { version = "2", default-features = false, features = ["display"] }
+strum = { version = "0.27.2", features = ["derive"] }
 
 [dependencies.web-sys]
 version = "0.3"
