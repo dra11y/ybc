@@ -36,17 +36,32 @@ impl TabId {
         }
     }
 
+    /// Returns the TabId from the location hash.
+    /// If not found, checks for a SectionId that matches, then returns
+    /// that Section's TabId.
+    pub fn from_id(id: Option<&str>) -> Option<Self> {
+        id.and_then(|id| Self::iter().find(|t| t.id() == id))
+            .or_else(|| Some(SectionId::from_id(id)?.tab_id()))
+    }
+
     pub fn id(&self) -> String {
         self.title().to_lowercase().replace(" ", "-")
+    }
+
+    pub fn link(&self) -> String {
+        format!("#{}", self.id())
     }
 
     pub fn title(&self) -> String {
         self.to_string()
     }
 
-    #[allow(unused)]
     pub fn section_ids(&self) -> Vec<SectionId> {
         SectionId::iter().filter(|s| s.tab_id() == *self).collect()
+    }
+
+    pub fn default_section_id(&self) -> Option<SectionId> {
+        self.section_ids().first().cloned()
     }
 
     pub fn menu_items(&self) -> Vec<MenuItem> {
@@ -169,6 +184,10 @@ impl SectionId {
         self.title().to_lowercase().replace(" ", "-")
     }
 
+    pub fn from_id(id: Option<&str>) -> Option<Self> {
+        id.and_then(|id| Self::iter().find(|t| t.id() == id))
+    }
+
     pub fn link(&self) -> String {
         format!("#{}", self.id())
     }
@@ -202,7 +221,7 @@ pub fn content(props: &TabContentProps) -> Html {
                     <MenuLabel text={props.tab.title()} />
                     <MenuList
                         items={Some(props.tab.menu_items())}
-                        scroll_spy={Some(ScrollSpyConfig::default())}
+                        scroll_spy={Some(ScrollSpyConfig { update_hash: false, ..ScrollSpyConfig::default() })}
                         click_behavior={ClickBehavior::Smooth}
                     />
                 </Menu>
