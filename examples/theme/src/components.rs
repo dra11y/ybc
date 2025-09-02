@@ -1,6 +1,8 @@
 use ybc::*;
 use yew::prelude::*;
 
+use crate::sections::{SectionContent, SectionId};
+
 #[function_component(BreadcrumbSection)]
 pub fn breadcrumb_section() -> Html {
     html! {
@@ -185,217 +187,202 @@ pub fn dropdown_section() -> Html {
     let open1 = use_state(|| false);
     let open2 = use_state(|| false);
     html! {
-        <>
-            <div id="dropdown"></div>
-            <Section>
-                <Title tag="h1">{"Dropdown"}</Title>
-                <hr />
-                <Columns>
-                    <Column>
-                        <ybc::Dropdown active={*open1} on_active_change={{let open1 = open1.clone(); Callback::from(move |v| open1.set(v))}} button_html={html!{
-                            <>
-                                <span>{"Dropdown button"}</span>
-                                <span class="icon is-small"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
-                            </>
-                        }}>
-                            <a href="#" class="dropdown-item">{"Dropdown item"}</a>
-                            <a class="dropdown-item">{"Other dropdown item"}</a>
-                            <a href="#" class="dropdown-item is-active">{"Active dropdown item"}</a>
-                            <a href="#" class="dropdown-item">{"Other dropdown item"}</a>
-                            <hr class="dropdown-divider" />
-                            <a href="#" class="dropdown-item">{"With a divider"}</a>
-                        </ybc::Dropdown>
-                    </Column>
-                    <Column>
-                        <ybc::Dropdown active={*open2} on_active_change={{let open2 = open2.clone(); Callback::from(move |v| open2.set(v))}} button_classes="is-info" button_html={html!{
-                            <>
-                                <span>{"Content"}</span>
-                                <span class="icon is-small"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
-                            </>
-                        }}>
-                            <div class="dropdown-item">
-                                <p>{"You can insert "}<strong>{"any type of content"}</strong>{" within the dropdown menu."}</p>
-                            </div>
-                            <hr class="dropdown-divider" />
-                            <div class="dropdown-item">
-                                <p>{"You simply need to use a "}<code>{"<div>"}</code>{" instead."}</p>
-                            </div>
-                            <hr class="dropdown-divider" />
-                            <a href="#" class="dropdown-item">{"This is a link"}</a>
-                        </ybc::Dropdown>
-                    </Column>
-                </Columns>
-            </Section>
-        </>
+        <SectionContent section={SectionId::Dropdown}>
+            <Columns>
+                <Column>
+                    <ybc::Dropdown active={*open1} on_active_change={{let open1 = open1.clone(); Callback::from(move |v| open1.set(v))}} button_html={html!{
+                        <>
+                            <span>{"Dropdown button"}</span>
+                            <span class="icon is-small"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                        </>
+                    }}>
+                        <a href="#" class="dropdown-item">{"Dropdown item"}</a>
+                        <a class="dropdown-item">{"Other dropdown item"}</a>
+                        <a href="#" class="dropdown-item is-active">{"Active dropdown item"}</a>
+                        <a href="#" class="dropdown-item">{"Other dropdown item"}</a>
+                        <hr class="dropdown-divider" />
+                        <a href="#" class="dropdown-item">{"With a divider"}</a>
+                    </ybc::Dropdown>
+                </Column>
+                <Column>
+                    <ybc::Dropdown active={*open2} on_active_change={{let open2 = open2.clone(); Callback::from(move |v| open2.set(v))}} button_classes="is-info" button_html={html!{
+                        <>
+                            <span>{"Content"}</span>
+                            <span class="icon is-small"><i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                        </>
+                    }}>
+                        <div class="dropdown-item">
+                            <p>{"You can insert "}<strong>{"any type of content"}</strong>{" within the dropdown menu."}</p>
+                        </div>
+                        <hr class="dropdown-divider" />
+                        <div class="dropdown-item">
+                            <p>{"You simply need to use a "}<code>{"<div>"}</code>{" instead."}</p>
+                        </div>
+                        <hr class="dropdown-divider" />
+                        <a href="#" class="dropdown-item">{"This is a link"}</a>
+                    </ybc::Dropdown>
+                </Column>
+            </Columns>
+        </SectionContent>
     }
 }
 
 #[function_component(MediaSection)]
 pub fn media_section() -> Html {
     html! {
-        <>
-            <div id="media"></div>
-            <Section>
-                <Title tag="h1">{"Media Object"}</Title>
-                <hr />
-                <Media>
-                    <MediaLeft>
-                        <Image size={Some(ImageSize::Is64x64)}>
-                            <img alt="Image" src="https://placehold.net/avatar-2.svg" />
-                        </Image>
-                    </MediaLeft>
-                    <MediaContent>
-                        <Content>
-                            <p>
-                                <strong>{"John Smith"}</strong>{" "}
-                                <small>{"@johnsmith"}</small>{" "}
-                                <small>{"31m"}</small>
-                                <br/>
-                                {"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis."}
-                            </p>
-                        </Content>
-                        <Level>
-                            <LevelLeft>
-                                <a class="level-item"><span class="icon is-small"><i class="fa fa-reply"></i></span></a>
-                                <a class="level-item"><span class="icon is-small"><i class="fa fa-retweet"></i></span></a>
-                                <a class="level-item"><span class="icon is-small"><i class="fa fa-heart"></i></span></a>
-                            </LevelLeft>
-                        </Level>
-                    </MediaContent>
-                    <ybc::MediaRight>
-                        <Delete />
-                    </ybc::MediaRight>
-                </Media>
-                <hr />
-                <Media>
-                    <MediaLeft>
-                        <Image size={Some(ImageSize::Is64x64)}>
-                            <img alt="Image" src="https://placehold.net/avatar-5.svg" />
-                        </Image>
-                    </MediaLeft>
-                    <MediaContent>
-                        <div class="field">
-                            <p class="control">
-                                <textarea class="textarea" placeholder="Add a comment..."></textarea>
-                            </p>
-                        </div>
-                        <Level>
-                            <LevelLeft>
-                                <div class="level-item">
-                                    <a class="button is-info">{"Post comment"}</a>
-                                </div>
-                            </LevelLeft>
-                            <ybc::LevelRight>
-                                <div class="level-item">
-                                    <label class="checkbox"><input type="checkbox" /> {" Press enter to submit"}</label>
-                                </div>
-                            </ybc::LevelRight>
-                        </Level>
-                    </MediaContent>
-                </Media>
-                <hr />
-                <Subtitle tag="h4">{"Nesting"}</Subtitle>
-                <Media>
-                    <MediaLeft>
-                        <Image size={Some(ImageSize::Is64x64)}>
-                            <img alt="Image" src="https://placehold.net/avatar-3.svg" />
-                        </Image>
-                    </MediaLeft>
-                    <MediaContent>
-                        <Content>
-                            <p>
-                                <strong>{"Barbara Middleton"}</strong>
-                                <br/>
-                                {"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris sit amet dolor blandit rutrum. Nunc in tempus turpis."}
-                                <br/>
-                                <small><a>{"Like"}</a>{" · "}<a>{"Reply"}</a>{" · 3 hrs"}</small>
-                            </p>
-                        </Content>
-                        <Media>
-                            <MediaLeft>
-                                <Image size={Some(ImageSize::Is64x64)}>
-                                    <img alt="Image" src="https://placehold.net/avatar-4.svg" />
-                                </Image>
-                            </MediaLeft>
-                            <MediaContent>
-                                <Content>
-                                    <p>
-                                        <strong>{"Sean Brown"}</strong>
-                                        <br/>
-                                        {"Donec sollicitudin urna eget eros malesuada sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam blandit nisl a nulla sagittis, a lobortis leo feugiat."}
-                                        <br/>
-                                        <small><a>{"Like"}</a>{" · "}<a>{"Reply"}</a>{" · 2 hrs"}</small>
-                                    </p>
-                                </Content>
-                                <Media>{"Vivamus quis semper metus, non tincidunt dolor. Vivamus in mi eu lorem cursus ullamcorper sit amet nec massa."}</Media>
-                                <Media>{"Morbi vitae diam et purus tincidunt porttitor vel vitae augue. Praesent malesuada metus sed pharetra euismod. Cras tellus odio, tincidunt iaculis diam non, porta aliquet tortor."}</Media>
-                            </MediaContent>
-                        </Media>
-                        <Media>
-                            <MediaLeft>
-                                <Image size={Some(ImageSize::Is64x64)}>
-                                    <img alt="Image" src="https://placehold.net/avatar-1.svg" />
-                                </Image>
-                            </MediaLeft>
-                            <MediaContent>
-                                <Content>
-                                    <p>
-                                        <strong>{"Kayli Eunice "}</strong>
-                                        <br/>
-                                        {"Sed convallis scelerisque mauris, non pulvinar nunc mattis vel. Maecenas varius felis sit amet magna vestibulum euismod malesuada cursus libero. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus lacinia non nisl id feugiat."}
-                                        <br/>
-                                        <small><a>{"Like"}</a>{" · "}<a>{"Reply"}</a>{" · 2 hrs"}</small>
-                                    </p>
-                                </Content>
-                            </MediaContent>
-                        </Media>
-                    </MediaContent>
-                </Media>
-            </Section>
-        </>
+        <SectionContent section={SectionId::MediaObject}>
+            <Media>
+                <MediaLeft>
+                    <Image size={Some(ImageSize::Is64x64)}>
+                        <img alt="Image" src="https://placehold.net/avatar-2.svg" />
+                    </Image>
+                </MediaLeft>
+                <MediaContent>
+                    <Content>
+                        <p>
+                            <strong>{"John Smith"}</strong>{" "}
+                            <small>{"@johnsmith"}</small>{" "}
+                            <small>{"31m"}</small>
+                            <br/>
+                            {"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis."}
+                        </p>
+                    </Content>
+                    <Level>
+                        <LevelLeft>
+                            <a class="level-item"><span class="icon is-small"><i class="fa fa-reply"></i></span></a>
+                            <a class="level-item"><span class="icon is-small"><i class="fa fa-retweet"></i></span></a>
+                            <a class="level-item"><span class="icon is-small"><i class="fa fa-heart"></i></span></a>
+                        </LevelLeft>
+                    </Level>
+                </MediaContent>
+                <ybc::MediaRight>
+                    <Delete />
+                </ybc::MediaRight>
+            </Media>
+            <hr />
+            <Media>
+                <MediaLeft>
+                    <Image size={Some(ImageSize::Is64x64)}>
+                        <img alt="Image" src="https://placehold.net/avatar-5.svg" />
+                    </Image>
+                </MediaLeft>
+                <MediaContent>
+                    <div class="field">
+                        <p class="control">
+                            <textarea class="textarea" placeholder="Add a comment..."></textarea>
+                        </p>
+                    </div>
+                    <Level>
+                        <LevelLeft>
+                            <div class="level-item">
+                                <a class="button is-info">{"Post comment"}</a>
+                            </div>
+                        </LevelLeft>
+                        <ybc::LevelRight>
+                            <div class="level-item">
+                                <label class="checkbox"><input type="checkbox" /> {" Press enter to submit"}</label>
+                            </div>
+                        </ybc::LevelRight>
+                    </Level>
+                </MediaContent>
+            </Media>
+            <hr />
+            <Subtitle tag="h4">{"Nesting"}</Subtitle>
+            <Media>
+                <MediaLeft>
+                    <Image size={Some(ImageSize::Is64x64)}>
+                        <img alt="Image" src="https://placehold.net/avatar-3.svg" />
+                    </Image>
+                </MediaLeft>
+                <MediaContent>
+                    <Content>
+                        <p>
+                            <strong>{"Barbara Middleton"}</strong>
+                            <br/>
+                            {"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris sit amet dolor blandit rutrum. Nunc in tempus turpis."}
+                            <br/>
+                            <small><a>{"Like"}</a>{" · "}<a>{"Reply"}</a>{" · 3 hrs"}</small>
+                        </p>
+                    </Content>
+                    <Media>
+                        <MediaLeft>
+                            <Image size={Some(ImageSize::Is64x64)}>
+                                <img alt="Image" src="https://placehold.net/avatar-4.svg" />
+                            </Image>
+                        </MediaLeft>
+                        <MediaContent>
+                            <Content>
+                                <p>
+                                    <strong>{"Sean Brown"}</strong>
+                                    <br/>
+                                    {"Donec sollicitudin urna eget eros malesuada sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam blandit nisl a nulla sagittis, a lobortis leo feugiat."}
+                                    <br/>
+                                    <small><a>{"Like"}</a>{" · "}<a>{"Reply"}</a>{" · 2 hrs"}</small>
+                                </p>
+                            </Content>
+                            <Media>{"Vivamus quis semper metus, non tincidunt dolor. Vivamus in mi eu lorem cursus ullamcorper sit amet nec massa."}</Media>
+                            <Media>{"Morbi vitae diam et purus tincidunt porttitor vel vitae augue. Praesent malesuada metus sed pharetra euismod. Cras tellus odio, tincidunt iaculis diam non, porta aliquet tortor."}</Media>
+                        </MediaContent>
+                    </Media>
+                    <Media>
+                        <MediaLeft>
+                            <Image size={Some(ImageSize::Is64x64)}>
+                                <img alt="Image" src="https://placehold.net/avatar-1.svg" />
+                            </Image>
+                        </MediaLeft>
+                        <MediaContent>
+                            <Content>
+                                <p>
+                                    <strong>{"Kayli Eunice "}</strong>
+                                    <br/>
+                                    {"Sed convallis scelerisque mauris, non pulvinar nunc mattis vel. Maecenas varius felis sit amet magna vestibulum euismod malesuada cursus libero. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus lacinia non nisl id feugiat."}
+                                    <br/>
+                                    <small><a>{"Like"}</a>{" · "}<a>{"Reply"}</a>{" · 2 hrs"}</small>
+                                </p>
+                            </Content>
+                        </MediaContent>
+                    </Media>
+                </MediaContent>
+            </Media>
+        </SectionContent>
     }
 }
 
 #[function_component(MenuSection)]
 pub fn menu_section() -> Html {
     html! {
-        <>
-            <div id="menu"></div>
-            <Section>
-                <Title tag="h1">{"Menu"}</Title>
-                <hr />
-                <div class="column is-3">
-                    <ybc::Menu>
-                        <ybc::MenuLabel text="General" />
-                        <ybc::MenuList>
-                            <li><a>{"Dashboard"}</a></li>
-                            <li><a>{"Customers"}</a></li>
-                        </ybc::MenuList>
-                        <ybc::MenuLabel text="Administration" />
-                        <ybc::MenuList>
-                            <li><a>{"Team Settings"}</a></li>
-                            <li>
-                                <a class="is-active">{"Manage Your Team"}</a>
-                                <ul>
-                                    <li><a>{"Members"}</a></li>
-                                    <li><a>{"Plugins"}</a></li>
-                                    <li><a>{"Add a member"}</a></li>
-                                </ul>
-                            </li>
-                            <li><a>{"Invitations"}</a></li>
-                            <li><a>{"Cloud Storage Environment Settings"}</a></li>
-                            <li><a>{"Authentication"}</a></li>
-                        </ybc::MenuList>
-                        <ybc::MenuLabel text="Transactions" />
-                        <ybc::MenuList>
-                            <li><a>{"Payments"}</a></li>
-                            <li><a>{"Transfers"}</a></li>
-                            <li><a>{"Balance"}</a></li>
-                        </ybc::MenuList>
-                    </ybc::Menu>
-                </div>
-            </Section>
-        </>
+        <SectionContent section={SectionId::Menu}>
+            <div class="column is-3">
+                <ybc::Menu>
+                    <ybc::MenuLabel text="General" />
+                    <ybc::MenuList>
+                        <li><a>{"Dashboard"}</a></li>
+                        <li><a>{"Customers"}</a></li>
+                    </ybc::MenuList>
+                    <ybc::MenuLabel text="Administration" />
+                    <ybc::MenuList>
+                        <li><a>{"Team Settings"}</a></li>
+                        <li>
+                            <a class="is-active">{"Manage Your Team"}</a>
+                            <ul>
+                                <li><a>{"Members"}</a></li>
+                                <li><a>{"Plugins"}</a></li>
+                                <li><a>{"Add a member"}</a></li>
+                            </ul>
+                        </li>
+                        <li><a>{"Invitations"}</a></li>
+                        <li><a>{"Cloud Storage Environment Settings"}</a></li>
+                        <li><a>{"Authentication"}</a></li>
+                    </ybc::MenuList>
+                    <ybc::MenuLabel text="Transactions" />
+                    <ybc::MenuList>
+                        <li><a>{"Payments"}</a></li>
+                        <li><a>{"Transfers"}</a></li>
+                        <li><a>{"Balance"}</a></li>
+                    </ybc::MenuList>
+                </ybc::Menu>
+            </div>
+        </SectionContent>
     }
 }
 
@@ -415,34 +402,29 @@ pub fn message_section() -> Html {
         ("is-dark", "Dark"),
     ];
     html! {
-        <>
-            <div id="message"></div>
-            <Section>
-                <Title tag="h1">{"Message"}</Title>
-                <hr />
-                <Columns classes="is-multiline">
-                    { for variants.into_iter().map(|(class, title)| html!{
-                        <Column classes="is-half">
-                            <Message classes={class}>
-                                <MessageHeader>
-                                    <p>{title}</p>
-                                    <Delete />
-                                </MessageHeader>
-                                <MessageBody>
-                                    {"Lorem ipsum dolor sit amet, consectetur adipiscing elit. "}
-                                    <strong>{"Pellentesque risus mi"}</strong>
-                                    {", tempus quis placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum "}
-                                    <a>{"felis venenatis"}</a>
-                                    {" efficitur. Aenean ac "}
-                                    <em>{"eleifend lacus"}</em>
-                                    {"."}
-                                </MessageBody>
-                            </Message>
-                        </Column>
-                    }) }
-                </Columns>
-            </Section>
-        </>
+        <SectionContent section={SectionId::Message}>
+            <Columns classes="is-multiline">
+                { for variants.into_iter().map(|(class, title)| html!{
+                    <Column classes="is-half">
+                        <Message classes={class}>
+                            <MessageHeader>
+                                <p>{title}</p>
+                                <Delete />
+                            </MessageHeader>
+                            <MessageBody>
+                                {"Lorem ipsum dolor sit amet, consectetur adipiscing elit. "}
+                                <strong>{"Pellentesque risus mi"}</strong>
+                                {", tempus quis placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum "}
+                                <a>{"felis venenatis"}</a>
+                                {" efficitur. Aenean ac "}
+                                <em>{"eleifend lacus"}</em>
+                                {"."}
+                            </MessageBody>
+                        </Message>
+                    </Column>
+                }) }
+            </Columns>
+        </SectionContent>
     }
 }
 
@@ -451,47 +433,42 @@ pub fn modal_section() -> Html {
     let handle_basic = ybc::use_modal();
     let handle_card = ybc::use_modal();
     html! {
-        <>
-            <div id="modal"></div>
-            <Section>
-                <Title tag="h1">{"Modal"}</Title>
-                <hr />
-                <div class="buttons">
-                    <Button classes="is-primary is-large" onclick={handle_basic.open_callback()}>{"Launch basic modal"}</Button>
-                    <Button classes="is-info is-large" onclick={handle_card.open_callback()}>{"Launch modal card"}</Button>
-                </div>
+        <SectionContent section={SectionId::Modal}>
+            <div class="buttons">
+                <Button classes="is-primary is-large" onclick={handle_basic.open_callback()}>{"Launch basic modal"}</Button>
+                <Button classes="is-info is-large" onclick={handle_card.open_callback()}>{"Launch modal card"}</Button>
+            </div>
 
-                <ybc::Modal id={"basicModal".to_string()} handle={handle_basic.clone()}>
-                    <ybc::Card>
-                        <ybc::CardContent>
-                            <Content>
-                                <Title size={HeaderSize::Is4}>{"Modal Content"}</Title>
-                                <p>{"This is a basic modal using the Modal component. It includes a card for proper spacing and visual hierarchy."}</p>
-                                <p>{"You can click the background or the X button to close this modal."}</p>
-                            </Content>
-                        </ybc::CardContent>
-                    </ybc::Card>
-                </ybc::Modal>
+            <ybc::Modal id={"basicModal".to_string()} handle={handle_basic.clone()}>
+                <ybc::Card>
+                    <ybc::CardContent>
+                        <Content>
+                            <Title size={HeaderSize::Is4}>{"Modal Content"}</Title>
+                            <p>{"This is a basic modal using the Modal component. It includes a card for proper spacing and visual hierarchy."}</p>
+                            <p>{"You can click the background or the X button to close this modal."}</p>
+                        </Content>
+                    </ybc::CardContent>
+                </ybc::Card>
+            </ybc::Modal>
 
-                <ybc::ModalCard
-                    id={"myModal".to_string()}
-                    handle={handle_card.clone()}
-                    title={"Modal title".to_string()}
-                    body={html!{<>
-                        {"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "}
-                        {"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "}
-                        {"Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. "}
-                        {"Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}
-                    </>}}
-                    footer={html!{
-                        <>
-                            <Button classes="is-primary" onclick={handle_card.close_callback()}>{"Save changes"}</Button>
-                            <Button onclick={handle_card.close_callback()}>{"Cancel"}</Button>
-                        </>
-                    }}
-                />
-            </Section>
-        </>
+            <ybc::ModalCard
+                id={"myModal".to_string()}
+                handle={handle_card.clone()}
+                title={"Modal title".to_string()}
+                body={html!{<>
+                    {"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "}
+                    {"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "}
+                    {"Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. "}
+                    {"Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}
+                </>}}
+                footer={html!{
+                    <>
+                        <Button classes="is-primary" onclick={handle_card.close_callback()}>{"Save changes"}</Button>
+                        <Button onclick={handle_card.close_callback()}>{"Cancel"}</Button>
+                    </>
+                }}
+            />
+        </SectionContent>
     }
 }
 
@@ -588,79 +565,71 @@ pub fn navbar_section() -> Html {
         </>
     };
     html! {
-        <>
-            <div id="navbar"></div>
-            <Section>
-                <Title tag="h1">{"Navbar"}</Title>
-                <hr />
-                <Navbar spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
-                <br />
-                <Navbar classes="is-primary" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
-                <br />
-                <Navbar classes="is-link" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
-                <br />
-                <Navbar classes="is-info" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
-                <br />
-                <Navbar classes="is-success" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
-                <br />
-                <Navbar classes="is-warning" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
-                <br />
-                <Navbar classes="is-danger" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
-                <br />
-                <Navbar classes="is-white" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
-                <br />
-                <Navbar classes="is-black" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
-                <br />
-                <Navbar classes="is-light" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
-                <br />
-                <Navbar classes="is-dark" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
-                <br />
-                <Navbar classes="is-transparent" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
-            </Section>
-        </>
+        <SectionContent section={SectionId::Navbar}>
+            <Title tag="h1">{"Navbar"}</Title>
+            <hr />
+            <Navbar spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+            <br />
+            <Navbar classes="is-primary" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+            <br />
+            <Navbar classes="is-link" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+            <br />
+            <Navbar classes="is-info" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+            <br />
+            <Navbar classes="is-success" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+            <br />
+            <Navbar classes="is-warning" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+            <br />
+            <Navbar classes="is-danger" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+            <br />
+            <Navbar classes="is-white" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+            <br />
+            <Navbar classes="is-black" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+            <br />
+            <Navbar classes="is-light" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+            <br />
+            <Navbar classes="is-dark" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+            <br />
+            <Navbar classes="is-transparent" spaced=true padded=true navbrand={brand.clone()} navstart={navstart.clone()} navend={navend.clone()} />
+        </SectionContent>
     }
 }
 
 #[function_component(PaginationSection)]
 pub fn pagination_section() -> Html {
     html! {
-        <>
-            <div id="pagination"></div>
-            <Section>
-                <Title tag="h1">{"Pagination"}</Title>
-                <hr />
-                <ybc::Pagination
-                    previous={html!{<ybc::PaginationItem item_type={ybc::PaginationItemType::Previous}>{"Previous"}</ybc::PaginationItem>}}
-                    next={html!{<ybc::PaginationItem item_type={ybc::PaginationItemType::Next}>{"Next page"}</ybc::PaginationItem>}}
-                >
-                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"1"}</ybc::PaginationItem></li>
-                    <li><ybc::PaginationEllipsis /></li>
-                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"45"}</ybc::PaginationItem></li>
-                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"46"}</ybc::PaginationItem></li>
-                    <li><a class="pagination-link is-current" aria-label="Page 47" aria-current="page">{"47"}</a></li>
-                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"48"}</ybc::PaginationItem></li>
-                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"49"}</ybc::PaginationItem></li>
-                    <li><ybc::PaginationEllipsis /></li>
-                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"86"}</ybc::PaginationItem></li>
-                </ybc::Pagination>
-                <br />
-                <ybc::Pagination
-                    rounded=true
-                    previous={html!{<ybc::PaginationItem item_type={ybc::PaginationItemType::Previous}>{"Previous"}</ybc::PaginationItem>}}
-                    next={html!{<ybc::PaginationItem item_type={ybc::PaginationItemType::Next}>{"Next page"}</ybc::PaginationItem>}}
-                >
-                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"1"}</ybc::PaginationItem></li>
-                    <li><ybc::PaginationEllipsis /></li>
-                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"45"}</ybc::PaginationItem></li>
-                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"46"}</ybc::PaginationItem></li>
-                    <li><a class="pagination-link is-current" aria-label="Page 47" aria-current="page">{"47"}</a></li>
-                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"48"}</ybc::PaginationItem></li>
-                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"49"}</ybc::PaginationItem></li>
-                    <li><ybc::PaginationEllipsis /></li>
-                    <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"86"}</ybc::PaginationItem></li>
-                </ybc::Pagination>
-            </Section>
-        </>
+        <SectionContent section={SectionId::Pagination}>
+            <ybc::Pagination
+                previous={html!{<ybc::PaginationItem item_type={ybc::PaginationItemType::Previous}>{"Previous"}</ybc::PaginationItem>}}
+                next={html!{<ybc::PaginationItem item_type={ybc::PaginationItemType::Next}>{"Next page"}</ybc::PaginationItem>}}
+            >
+                <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"1"}</ybc::PaginationItem></li>
+                <li><ybc::PaginationEllipsis /></li>
+                <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"45"}</ybc::PaginationItem></li>
+                <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"46"}</ybc::PaginationItem></li>
+                <li><a class="pagination-link is-current" aria-label="Page 47" aria-current="page">{"47"}</a></li>
+                <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"48"}</ybc::PaginationItem></li>
+                <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"49"}</ybc::PaginationItem></li>
+                <li><ybc::PaginationEllipsis /></li>
+                <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"86"}</ybc::PaginationItem></li>
+            </ybc::Pagination>
+            <br />
+            <ybc::Pagination
+                rounded=true
+                previous={html!{<ybc::PaginationItem item_type={ybc::PaginationItemType::Previous}>{"Previous"}</ybc::PaginationItem>}}
+                next={html!{<ybc::PaginationItem item_type={ybc::PaginationItemType::Next}>{"Next page"}</ybc::PaginationItem>}}
+            >
+                <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"1"}</ybc::PaginationItem></li>
+                <li><ybc::PaginationEllipsis /></li>
+                <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"45"}</ybc::PaginationItem></li>
+                <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"46"}</ybc::PaginationItem></li>
+                <li><a class="pagination-link is-current" aria-label="Page 47" aria-current="page">{"47"}</a></li>
+                <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"48"}</ybc::PaginationItem></li>
+                <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"49"}</ybc::PaginationItem></li>
+                <li><ybc::PaginationEllipsis /></li>
+                <li><ybc::PaginationItem item_type={ybc::PaginationItemType::Link}>{"86"}</ybc::PaginationItem></li>
+            </ybc::Pagination>
+        </SectionContent>
     }
 }
 
@@ -689,63 +658,58 @@ pub fn panel_section() -> Html {
     };
 
     html! {
-        <>
-            <div id="panel"></div>
-            <Section>
-                <Title tag="h1">{"Panel"}</Title>
-                <hr />
-                <ybc::Panel heading={html!{"Repositories"}}>
-                    <ybc::PanelTabs>
-                        <a class={classes!((*active == "all").then_some("is-active"))} onclick={on_all}>{"All"}</a>
-                        <a class={classes!((*active == "public").then_some("is-active"))} onclick={on_public}>{"Public"}</a>
-                        <a class={classes!((*active == "private").then_some("is-active"))} onclick={on_private}>{"Private"}</a>
-                        <a class={classes!((*active == "sources").then_some("is-active"))} onclick={on_sources}>{"Sources"}</a>
-                        <a class={classes!((*active == "forks").then_some("is-active"))} onclick={on_forks}>{"Forks"}</a>
-                    </ybc::PanelTabs>
+        <SectionContent section={SectionId::Panel}>
+            <ybc::Panel heading={html!{"Repositories"}}>
+                <ybc::PanelTabs>
+                    <a class={classes!((*active == "all").then_some("is-active"))} onclick={on_all}>{"All"}</a>
+                    <a class={classes!((*active == "public").then_some("is-active"))} onclick={on_public}>{"Public"}</a>
+                    <a class={classes!((*active == "private").then_some("is-active"))} onclick={on_private}>{"Private"}</a>
+                    <a class={classes!((*active == "sources").then_some("is-active"))} onclick={on_sources}>{"Sources"}</a>
+                    <a class={classes!((*active == "forks").then_some("is-active"))} onclick={on_forks}>{"Forks"}</a>
+                </ybc::PanelTabs>
 
-                    <ybc::PanelBlock>
-                        <p class="control has-icons-left">
-                            <input class="input" type="text" placeholder="Search" />
-                            <span class="icon is-left"><i class="fas fa-search" aria-hidden="true"></i></span>
-                        </p>
-                    </ybc::PanelBlock>
+                <ybc::PanelBlock>
+                    <p class="control has-icons-left">
+                        <input class="input" type="text" placeholder="Search" />
+                        <span class="icon is-left"><i class="fas fa-search" aria-hidden="true"></i></span>
+                    </p>
+                </ybc::PanelBlock>
 
-                    <ybc::PanelBlock active=true>
-                        <span class="panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span>
-                        <span>{"bulma"}</span>
-                    </ybc::PanelBlock>
-                    <ybc::PanelBlock>
-                        <span class="panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span>
-                        <span>{"marksheet"}</span>
-                    </ybc::PanelBlock>
-                    <ybc::PanelBlock>
-                        <span class="panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span>
-                        <span>{"minireset.css"}</span>
-                    </ybc::PanelBlock>
-                    <ybc::PanelBlock>
-                        <span class="panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span>
-                        <span>{"jgthms.github.io"}</span>
-                    </ybc::PanelBlock>
-                    <ybc::PanelBlock>
-                        <span class="panel-icon"><i class="fas fa-code-branch" aria-hidden="true"></i></span>
-                        <span>{"danielroseman/streaming"}</span>
-                    </ybc::PanelBlock>
-                    <ybc::PanelBlock>
-                        <span class="panel-icon"><i class="fas fa-code-branch" aria-hidden="true"></i></span>
-                        <span>{"mojs"}</span>
-                    </ybc::PanelBlock>
+                <ybc::PanelBlock active=true>
+                    <span class="panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span>
+                    <span>{"bulma"}</span>
+                </ybc::PanelBlock>
+                <ybc::PanelBlock>
+                    <span class="panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span>
+                    <span>{"marksheet"}</span>
+                </ybc::PanelBlock>
+                <ybc::PanelBlock>
+                    <span class="panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span>
+                    <span>{"minireset.css"}</span>
+                </ybc::PanelBlock>
+                <ybc::PanelBlock>
+                    <span class="panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span>
+                    <span>{"jgthms.github.io"}</span>
+                </ybc::PanelBlock>
+                <ybc::PanelBlock>
+                    <span class="panel-icon"><i class="fas fa-code-branch" aria-hidden="true"></i></span>
+                    <span>{"danielroseman/streaming"}</span>
+                </ybc::PanelBlock>
+                <ybc::PanelBlock>
+                    <span class="panel-icon"><i class="fas fa-code-branch" aria-hidden="true"></i></span>
+                    <span>{"mojs"}</span>
+                </ybc::PanelBlock>
 
-                    <ybc::PanelBlock tag={"label".to_string()}>
-                        <input type="checkbox" />
-                        <span>{"Remember me"}</span>
-                    </ybc::PanelBlock>
+                <ybc::PanelBlock tag={"label".to_string()}>
+                    <input type="checkbox" />
+                    <span>{"Remember me"}</span>
+                </ybc::PanelBlock>
 
-                    <ybc::PanelBlock>
-                        <Button classes="is-link is-outlined is-fullwidth">{"Reset all filters"}</Button>
-                    </ybc::PanelBlock>
-                </ybc::Panel>
-            </Section>
-        </>
+                <ybc::PanelBlock>
+                    <Button classes="is-link is-outlined is-fullwidth">{"Reset all filters"}</Button>
+                </ybc::PanelBlock>
+            </ybc::Panel>
+        </SectionContent>
     }
 }
 
@@ -774,33 +738,28 @@ pub fn tabs_section() -> Html {
         },
     ];
     html! {
-        <>
-            <div id="tabs"></div>
-            <Section>
-                <Title tag="h1">{"Tabs"}</Title>
-                <hr />
-                <ybc::Tabs tabs={tabs_vec.clone()} />
-                <br />
-                <ybc::Tabs alignment={Some(ybc::Alignment::Centered)} tabs={tabs_vec.clone()} />
-                <br />
-                <ybc::Tabs size={Some(ybc::Size::Small)} tabs={tabs_vec.clone()} />
-                <br />
-                <ybc::Tabs size={Some(ybc::Size::Medium)} tabs={tabs_vec.clone()} />
-                <br />
-                <ybc::Tabs size={Some(ybc::Size::Large)} tabs={tabs_vec.clone()} />
-                <br />
-                <ybc::Tabs boxed=true tabs={tabs_vec.clone()} />
-                <br />
-                <ybc::Tabs toggle=true tabs={tabs_vec.clone()} />
-                <br />
-                <ybc::Tabs toggle=true rounded=true tabs={tabs_vec.clone()} />
-                <br />
-                <ybc::Tabs fullwidth=true tabs={tabs_vec.clone()} />
-                <br />
-                <ybc::Tabs alignment={Some(ybc::Alignment::Centered)} boxed=true tabs={tabs_vec.clone()} />
-                <br />
-                <ybc::Tabs toggle=true fullwidth=true size={Some(ybc::Size::Large)} tabs={tabs_vec.clone()} />
-            </Section>
-        </>
+        <SectionContent section={SectionId::Tabs}>
+            <ybc::Tabs tabs={tabs_vec.clone()} />
+            <br />
+            <ybc::Tabs alignment={Some(ybc::Alignment::Centered)} tabs={tabs_vec.clone()} />
+            <br />
+            <ybc::Tabs size={Some(ybc::Size::Small)} tabs={tabs_vec.clone()} />
+            <br />
+            <ybc::Tabs size={Some(ybc::Size::Medium)} tabs={tabs_vec.clone()} />
+            <br />
+            <ybc::Tabs size={Some(ybc::Size::Large)} tabs={tabs_vec.clone()} />
+            <br />
+            <ybc::Tabs boxed=true tabs={tabs_vec.clone()} />
+            <br />
+            <ybc::Tabs toggle=true tabs={tabs_vec.clone()} />
+            <br />
+            <ybc::Tabs toggle=true rounded=true tabs={tabs_vec.clone()} />
+            <br />
+            <ybc::Tabs fullwidth=true tabs={tabs_vec.clone()} />
+            <br />
+            <ybc::Tabs alignment={Some(ybc::Alignment::Centered)} boxed=true tabs={tabs_vec.clone()} />
+            <br />
+            <ybc::Tabs toggle=true fullwidth=true size={Some(ybc::Size::Large)} tabs={tabs_vec.clone()} />
+        </SectionContent>
     }
 }

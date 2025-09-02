@@ -20,8 +20,6 @@ pub enum TabId {
     Elements,
     Components,
     Forms,
-    Columns,
-    Grid,
     Layout,
 }
 
@@ -88,12 +86,6 @@ impl TabId {
                 </>},
                 TabId::Forms => html! {<>
                     <FormSection />
-                </>},
-                TabId::Columns => html! {<>
-                    // TODO
-                </>},
-                TabId::Grid => html! {<>
-                    // TODO
                 </>},
                 TabId::Layout => html! {<>
                     <HeroSection />
