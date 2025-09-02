@@ -39,6 +39,8 @@ pub use components::card::{
     Card, CardContent, CardContentProps, CardFooter, CardFooterProps, CardHeader, CardHeaderProps, CardImage, CardImageProps, CardProps,
 };
 pub use components::dropdown::{Dropdown, DropdownMsg, DropdownProps};
+#[cfg(feature = "scroll-spy")]
+pub use components::menu::{ClickBehavior, ScrollSpyConfig};
 pub use components::menu::{Menu, MenuItem, MenuLabel, MenuLabelProps, MenuList, MenuListProps, MenuProps};
 pub use components::message::{Message, MessageBody, MessageBodyProps, MessageHeader, MessageHeaderProps, MessageProps};
 pub use components::modal::{

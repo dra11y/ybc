@@ -23,11 +23,23 @@ yew-router = { version = "0.18", optional = true }
 wasm-bindgen = "0.2"
 serde = { version = "1", features = ["derive"] }
 console_error_panic_hook = { version = "0.1.7", optional = true }
+gloo-timers = { version = "0.3", optional = true }
 
 [features]
 default = ["router"]
 router = ["yew-router"]
-docinclude = []         # Used only for activating `doc(include="...")` on nightly.
+docinclude = [] # Used only for activating `doc(include="...")` on nightly.
+scroll-spy = [
+    # Enable additional web-sys APIs only when scroll-spy is enabled
+    "web-sys/Window",
+    "web-sys/Document",
+    "web-sys/HtmlElement",
+    "web-sys/History",
+    "web-sys/DomRect",
+    "web-sys/CssStyleDeclaration",
+    # Optional timers for throttling and timed scroll
+    "gloo-timers",
+]
 
 [package.metadata.docs.rs]
 features = ["docinclude"] # Activate `docinclude` during docs.rs build.

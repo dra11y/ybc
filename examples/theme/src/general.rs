@@ -255,11 +255,11 @@ pub fn button_section() -> Html {
                         </ybc::Field>
                         <Buttons>
                             <Button classes="is-rounded">{"Rounded"}</Button>
-                            <Button classes="is-primary is-rounded">{"Rounded"}</Button>
-                            <Button classes="is-link is-rounded">{"Rounded"}</Button>
-                            <Button classes="is-info is-rounded">{"Rounded"}</Button>
-                            <Button classes="is-success is-rounded">{"Rounded"}</Button>
-                            <Button classes="is-danger is-rounded">{"Rounded"}</Button>
+                            <Button classes="is-primary is-rounded">{"Primary"}</Button>
+                            <Button classes="is-link is-rounded">{"Link"}</Button>
+                            <Button classes="is-info is-rounded">{"Info"}</Button>
+                            <Button classes="is-success is-rounded">{"Success"}</Button>
+                            <Button classes="is-danger is-rounded">{"Danger"}</Button>
                         </Buttons>
                     </Column>
                     <Column>

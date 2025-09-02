@@ -121,7 +121,7 @@ pub fn card_section() -> Html {
                         <ybc::Card>
                             <ybc::CardImage>
                                 <Image classes="is-4by3">
-                                    <img alt="" src="https://picsum.photos/800/600" />
+                                    <img alt="" src="https://fastly.picsum.photos/id/704/800/600.jpg?hmac=BM2k67bQyfpxD6svOVCJzkmG3ydKmrU6ozSVQDsanSg" />
                                 </Image>
                             </ybc::CardImage>
                             <ybc::CardContent>

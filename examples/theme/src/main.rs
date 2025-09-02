@@ -205,41 +205,49 @@ pub fn app() -> Html {
                                     </Columns>
                                 }
                             },
-                            // Components
-                            1 => html!{
-                                <Columns>
-                                    <Column classes="is-2">
-                                        <div style="position: sticky; top: 1rem;">
-                                            <ybc::Menu>
-                                                <ybc::MenuLabel text="Components" />
-                                                <ybc::MenuList>
-                                                    <li><a href="#breadcrumb">{"Breadcrumb"}</a></li>
-                                                    <li><a href="#card">{"Card"}</a></li>
-                                                    <li><a href="#dropdown">{"Dropdown"}</a></li>
-                                                    <li><a href="#menu">{"Menu"}</a></li>
-                                                    <li><a href="#message">{"Message"}</a></li>
-                                                    <li><a href="#modal">{"Modal"}</a></li>
-                                                    <li><a href="#navbar">{"Navbar"}</a></li>
-                                                    <li><a href="#pagination">{"Pagination"}</a></li>
-                                                    <li><a href="#panel">{"Panel"}</a></li>
-                                                    <li><a href="#tabs">{"Tabs"}</a></li>
-                                                </ybc::MenuList>
-                                            </ybc::Menu>
-                                        </div>
-                                    </Column>
-                                    <Column>
-                                        <BreadcrumbSection />
-                                        <CardSection />
-                                        <DropdownSection />
-                                        <MenuSection />
-                                        <MessageSection />
-                                        <ModalSection />
-                                        <NavbarSection />
-                                        <PaginationSection />
-                                        <PanelSection />
-                                        <TabsSection />
-                                    </Column>
-                                </Columns>
+                            // Components (using library scroll-spy feature)
+                            1 => {
+                                let components_items = vec![
+                                    MenuItem { id: "breadcrumb".into(), label: "Breadcrumb".into(), href: "#breadcrumb".into(), children: None },
+                                    MenuItem { id: "card".into(), label: "Card".into(), href: "#card".into(), children: None },
+                                    MenuItem { id: "dropdown".into(), label: "Dropdown".into(), href: "#dropdown".into(), children: None },
+                                    MenuItem { id: "menu".into(), label: "Menu".into(), href: "#menu".into(), children: None },
+                                    MenuItem { id: "message".into(), label: "Message".into(), href: "#message".into(), children: None },
+                                    MenuItem { id: "modal".into(), label: "Modal".into(), href: "#modal".into(), children: None },
+                                    MenuItem { id: "navbar".into(), label: "Navbar".into(), href: "#navbar".into(), children: None },
+                                    MenuItem { id: "pagination".into(), label: "Pagination".into(), href: "#pagination".into(), children: None },
+                                    MenuItem { id: "panel".into(), label: "Panel".into(), href: "#panel".into(), children: None },
+                                    MenuItem { id: "tabs".into(), label: "Tabs".into(), href: "#tabs".into(), children: None },
+                                ];
+
+                                html!{
+                                    <Columns>
+                                        <Column classes="is-2">
+                                            <div style="position: sticky; top: 1rem;">
+                                                <ybc::Menu>
+                                                    <ybc::MenuLabel text="Components" />
+                                                    <ybc::MenuList
+                                                        items={Some(components_items)}
+                                                        scroll_spy={Some(ybc::ScrollSpyConfig::default())}
+                                                        click_behavior={ybc::ClickBehavior::Smooth}
+                                                    />
+                                                </ybc::Menu>
+                                            </div>
+                                        </Column>
+                                        <Column>
+                                            <BreadcrumbSection />
+                                            <CardSection />
+                                            <DropdownSection />
+                                            <MenuSection />
+                                            <MessageSection />
+                                            <ModalSection />
+                                            <NavbarSection />
+                                            <PaginationSection />
+                                            <PanelSection />
+                                            <TabsSection />
+                                        </Column>
+                                    </Columns>
+                                }
                             },
                             // Form
                             2 => html!{
